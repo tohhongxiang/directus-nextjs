@@ -1,0 +1,4 @@
+.next
+extensions
+node_modules
+.env
