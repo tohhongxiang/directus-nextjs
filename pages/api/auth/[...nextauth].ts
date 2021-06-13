@@ -12,4 +12,10 @@ export default NextAuth({
     ],
     // A database is optional, but required to persist accounts in a database
     database: process.env.DATABASE_URL,
+    pages: {
+        signIn: '/login',
+        signOut: '/logout',
+        verifyRequest: null, // (used for check email message)
+        newUser: null // If set, new users will be directed here on first sign in
+    }
 })

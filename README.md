@@ -2,18 +2,52 @@
 
 We are going to create an e-commerce application with the following stack:
 
+- Directus as a headless CMS
 - NextJS with TypeScript
 - Next-Auth for authentication
 - TailwindCSS for styling
-- Directus as a headless CMS
+- Snipcart for shopping cart
+
+Here is the following feature scope we would like to achieve
+
+- Customer able to login and view their purchase history
+- Shopping cart that also allows user to be sent to checkout
+- Customer able to pay
+- Website owner able to login and update product catalogs (Add product, delete product, update product)
 
 # Directus Setup
 
-Create a postgres database `next-auth-client` within postgres
+In the root of the project, run
 
-`npm run server` to get directus server running on port `8055`
+```
+npx create-directus-project .
+```
+
+Follow the prompts. We will be using the following configuration:
+- Database client: PostgreSQL
+- Host: 127.0.0.1
+- Port: 5432
+- Database name: next-auth-client
+- Database user: postgres
+- Database password: postgrespassword
+
+Then you will be prompted to create your first admin user for directus. We will be using
+- Email: admin@example.com
+- Password: 123456789
+
+Create a postgres database `next-auth-client` within postgres, to allow directus to start using that database.
+
+Inside `package.json`, add a new `scripts` command:
+
+```
+"server": "npx directus start"
+```
+
+`npm run server` to get directus server running on port `8055`. Go to `http://localhost:8055` and login with the admin user created above to check that it works.
 
 # NextJS Setup
+
+We will now integrate NextJS into our project as well.
 
 ```
 npm install next react react-dom
@@ -257,6 +291,113 @@ CREATE UNIQUE INDEX token
   ON verification_requests(token);
 ```
 
+# Making Directus and NextJS run at the same time
+
+Install `concurrently`
+
+```
+npm install concurrently
+```
+
+Then change `dev` in `package.json` to:
+
+```
+"dev": "concurrently \"next dev\" \"npm run server\"",
+```
+
+# Custom Login Page
+
+We are going to use `/login` to be our login page. Within `/pages/api/auth/[...nextauth].ts` we will add the `pages` option to next-auth
+
+```ts
+export default NextAuth({
+    // Configure one or more authentication providers
+    providers: [
+        Providers.Google({
+            clientId: process.env.GOOGLE_ID,
+            clientSecret: process.env.GOOGLE_SECRET
+        }),
+        // ...add more providers here
+    ],
+    // A database is optional, but required to persist accounts in a database
+    database: process.env.DATABASE_URL,
+    pages: {
+        signIn: '/login',
+        signOut: '/logout',
+        verifyRequest: null, // (used for check email message)
+        newUser: null // If set, new users will be directed here on first sign in
+    }
+})
+```
+
+Now we can create a page under `/pages/login.tsx` and fill it with what we want
+
+```tsx
+import { GetServerSidePropsContext } from 'next'
+import { getProviders, signIn, ClientSafeProvider, getSession } from 'next-auth/client'
+
+interface LoginProps {
+    providers: Record<string, ClientSafeProvider>
+}
+
+export default function Login({ providers }: LoginProps) {
+    return (
+        <>
+            {Object.values(providers).map(provider => (
+                <div key={provider.name}>
+                    <button onClick={() => signIn(provider.id)}>Sign in with {provider.name}</button>
+                </div>
+            ))}
+        </>
+    )
+}
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+    const { req, res } = context
+    const session = await getSession({ req })
+
+    if (session && res) {
+        res.writeHead(302, {
+            Location: '/'
+        })
+
+        res.end()
+        return { props: {} }
+    }
+
+    
+    const providers = await getProviders()
+
+    return {
+        props: { providers }
+    }
+}
+```
+
+Important things to note:
+- Inside `getServerSideProps`, we try and see if a session already exists. If it does, we redirect to `/`. If not, we get all the available providers to login with, and we return them as props to the login page to render.
+- For each provider, we sign in with `signIn(provider.id)` provided by next-auth
+
+You can see a more elaborate tutorial [here](https://www.youtube.com/watch?v=kB6YNYZ63fw).
+
+# Global Layout
+
+We will now write the layout we want to use throughout the app. It will have a navbar on top, the main content in the middle, and a footer below. Refer to the following files:
+- Navbar: `/components/Navbar.tsx`
+- Footer: `/components/Footer.tsx`
+- Layout: `/components/Layout.tsx`
+
+The navbar is based off [TailwindUI's navbar](https://tailwindui.com/components/application-ui/navigation/navbars). Important things to note:
+- `Navbar` should have links to `/login` to login, and display different things based on whether the user is logged in or not. To check whether the user is logged in, you can use the `useSession` hook provided by next auth. 
+
+```ts
+const [session, isLoading] = useSession();
+const isLoggedIn = session !== null
+```
+
+- Within `Navbar`, we also used a `useOnClickOutside(ref, handler)` hook, which runs `handler` whenever a click **outside** `ref` is detected. Code for the hook is found [here](https://usehooks.com/useOnClickOutside/)
+- Within `Layout`, we used `Head` provided by NextJS to update the title of the tab dynamically.
+
 # Resources
 
 - [Directus Quickstart](https://docs.directus.io/getting-started/quickstart/)
@@ -269,3 +410,7 @@ CREATE UNIQUE INDEX token
 - [NextJS API Routes](https://nextjs.org/docs/api-routes/introduction) and for [typescript](https://nextjs.org/docs/basic-features/typescript#api-routes)
 - [TypeORM documentation](https://github.com/typeorm/typeorm)
 - [Add auth support to a Next.js app with a custom backend](https://arunoda.me/blog/add-auth-support-to-a-next-js-app-with-a-custom-backend)
+- [Custom next-auth Login Page](https://www.youtube.com/watch?v=kB6YNYZ63fw)
+- [NextJS Authentication Crash Course with NextAuth.js](https://www.youtube.com/watch?v=o_wZIVmWteQ)
+- [TailwindUI's navbar](https://tailwindui.com/components/application-ui/navigation/navbars)
+- [useOnClickOutside](https://usehooks.com/useOnClickOutside/)
