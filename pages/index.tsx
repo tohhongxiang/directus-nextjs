@@ -20,9 +20,7 @@ export default function Page({ session }: PageProps) {
 export async function getServerSideProps(context: GetServerSidePropsContext) {
     const { req, res } = context
     const session = await getSession({ req })
-
-    // const { data: users } = await fetch('http://localhost:8055/items/users?' + new URLSearchParams({ search: "tohhongxiang@gmail.com" })).then(res => res.json())
-    // console.log(users)
+    
     return {
         props: {
             session
