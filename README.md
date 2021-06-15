@@ -308,7 +308,20 @@ const isLoggedIn = session !== null
 ```
 
 - Within `Navbar`, we also used a `useOnClickOutside(ref, handler)` hook, which runs `handler` whenever a click **outside** `ref` is detected. Code for the hook is found [here](https://usehooks.com/useOnClickOutside/)
-- Within `Layout`, we used `Head` provided by NextJS to update the title of the tab dynamically.
+
+An important thing to note is that we will use `Layout` globally. Within `/pages/_app.tsx`, it looks like:
+
+```tsx
+export default function App({ Component, pageProps }) {
+  return (
+    <Provider session={pageProps.session}>
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
+    </Provider>
+  )
+}
+```
 
 # Setting Up Users
 
@@ -330,40 +343,44 @@ Our user schema will have the following columns:
 - date_created (Timestamp)
 - date_updated (Timestamp)
 
-Go to http://localhost:8055 and login with admin@example.com. Then create a new collection `users` with those fields above.
+Go to http://localhost:8055 and login with admin@example.com. Then create a new collection `users` with those fields above. Make sure to enable permissions for public users to GET the `users` data model (By default public users has no access to any collection). We will not allow public users to POST, PATCH, or DELETE users.
 
 Now within `/pages/api/auth/[...nextauth].ts`, we will update our `NextAuth` object to
 
 ```ts
-const API_URL = `http://localhost:${process.env.PORT}/items`
+const API_URL = `${process.env.BASE_URL}:${process.env.PORT}`
 export default NextAuth({
-    // Configure one or more authentication providers
-    providers: [
-        Providers.Google({
-            clientId: process.env.GOOGLE_ID,
-            clientSecret: process.env.GOOGLE_SECRET
-        }),
-        // ...add more providers here
-    ],
-    pages: {
-        signIn: '/login',
-        signOut: '/logout',
-        verifyRequest: null, // (used for check email message)
-        newUser: null // If set, new users will be directed here on first sign in
-    },
+    // ...already exists
     callbacks: {
         async signIn(user, account, profile) {
+            if (!user) return false
+
             // check if user exists within database
             const { id, name, email } = user
-            const { data } = await fetch(`${API_URL}/users?filter[id][_eq]=${id}`).then(response => response.json())
+            const { data } = await fetch(`${API_URL}/items/users?filter[id][_eq]=${id}`).then(response => response.json())
 
+            // if no user, get directus access token, then create a new user
             if (data.length == 0) {
-                await fetch(`${API_URL}/users`, {
+                const directus_admin = {
+                    email: process.env.DIRECTUS_EMAIL,
+                    password: process.env.DIRECTUS_PASSWORD
+                }
+                const { data: { access_token } } = await fetch(`${API_URL}/auth/login`, {
+                    method: 'POST',
+                    body: JSON.stringify(directus_admin),
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                }).then(r => r.json())
+
+                await fetch(`${API_URL}/items/users`, {
                     method: 'POST',
                     body: JSON.stringify({ id, name, email }),
                     headers: {
                         'Accept': 'application/json',
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${access_token}`
                     },
                 })
             }
@@ -373,18 +390,96 @@ export default NextAuth({
         async session(session, user) {
             // get user from database
             const { email } = user
-            const { data } = await fetch(`${API_URL}/users?filter[email][_eq]=${email}`).then(response => response.json())
-            const currentUser = data[0];
+            const { data } = await fetch(`${API_URL}/items/users?filter[email][_eq]=${email}`).then(response => response.json())
 
-            (session.user as any).id = currentUser.id
+            const currentUser = data[0];
+            if (!currentUser) {
+                return session
+            }
+
             // extend session object
+            (session.user as any).id = currentUser.id
             return session
         },
     }
 })
 ```
 
+Note: The following new variables were added to `.env`
+- `BASE_URL` - the base url of our site. For local development, it is `http://localhost`
+- `DIRECTUS_EMAIL`
+- `DIRECTUS_PASSWORD`
+
 Now if we were to sign in using google onto our webpage, and then check directus, we will see our new user appearing within our database. And, our session object will also include `id`
+
+# Adding SnipCart
+
+We will now add [Snipcart](https://snipcart.com/), which is a shopping cart that supports international payments, onto the site. Within `/components/Layout.tsx`, we will include assets for snipcart. Specifically, within the head:
+
+```tsx
+<link rel="preconnect" href="https://app.snipcart.com"></link>
+<link rel="preconnect" href="https://cdn.snipcart.com"></link>
+<link rel="stylesheet" href="https://cdn.snipcart.com/themes/v3.2.0/default/snipcart.css" />
+<script async src="https://cdn.snipcart.com/themes/v3.2.0/default/snipcart.js"></script>
+```
+
+Snipcart's CDN assets, css and js. Then, within the body of the layout, we include the cart itself, hidden
+
+```tsx
+<div hidden id="snipcart" data-api-key={process.env.SNIPCART_KEY} data-config-modal-style="side"></div>
+```
+
+If you want a full screen cart rather than a side modal, remove `data-config-modal-style="side"`.
+
+Another thing to note is the region. Available regions will be the regions you allow your customers to checkout from. Under `Dashboard/Regional Settings`, there is a section for `Enabled Countries`. Ensure the correct countries are checked.
+
+# Adding Products
+
+Our product schema will look like this:
+
+- id (Primary not null auto-increment)
+- name (string not null)
+- price (float not null)
+- description (rich text)
+- image (file)
+- date_created (timestamp)
+- date_updated (timestamp)
+
+Create a new collection in directus, called `products`, and fill up the details accordingly. Then create a product within directus. To get products, you will have to GET http://localhost:8055/items/products. A sample product will look like this when retrieved
+
+```json
+{
+    "id": 1,
+    "date_created": "2021-06-15T11:40:55+08:00",
+    "date_updated": "2021-06-15T12:38:21+08:00",
+    "price": 79.99,
+    "description": "<p>Vincent Van Gogh's&nbsp;<strong>amazing</strong> starry night</p>",
+    "image": "f3823afc-873e-4b97-ae46-b06f19c9bd6b",
+    "name": "Starry Night Painting"
+}
+```
+
+To get the image, we must do 2 things
+
+1. Within directus dashboard, go to `Settings/Roles and Permissions` and expand `System Collections`. Make sure that the public is able to view `Directus Files`
+2. To actually get the file, make a GET request to `http://localhost:8055/assets/:file-id`. This endpoint also supports query arguments, which can be found [here](https://docs.directus.io/reference/api/assets/)
+
+## Many to Many Relationships
+
+We will add a many-to-many relationship called `categories` within our products. First, we must create a collection called `categories` which has the following schema
+
+- id
+- name
+
+Now in `products`, create a new many-to-many field called `categories`. Check that it maps `products.id` to `categories.id` in a junction collection called `products_categories`. If required, check "Add Many-to-Many to categories" under the relationship section as well. This creates a corresponding `products` column in the `categories` table.
+
+Now, to be able to see this new field, we must go to `Settings/Roles and Permissions` in the directus dashboard and make sure public users are able to see the `Products Categories` table.
+
+We will now also add another many-to-many field within `products` called `secondary_images`, which will be additional images for the product. Under directus' dashboard, create a new field with the option "Multiple Files", name it `secondary_images`. After that, under `Settings/Roles and Permissions`, also make sure that the public can view the `Products Directus Files` collection
+
+
+
+
 
 # Resources
 
@@ -401,3 +496,6 @@ Now if we were to sign in using google onto our webpage, and then check directus
 - [NextJS Authentication Crash Course with NextAuth.js](https://www.youtube.com/watch?v=o_wZIVmWteQ)
 - [TailwindUI's navbar](https://tailwindui.com/components/application-ui/navigation/navbars)
 - [useOnClickOutside](https://usehooks.com/useOnClickOutside/)
+- [Snipcart Getting Started](https://docs.snipcart.com/v3/setup/installation)
+- [Directus Assets](https://docs.directus.io/reference/api/assets/)
+- [SEO](https://snipcart.com/blog/react-nextjs-single-page-application-seo)

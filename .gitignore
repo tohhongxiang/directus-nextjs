@@ -2,3 +2,4 @@
 extensions
 node_modules
 .env
+public/uploads

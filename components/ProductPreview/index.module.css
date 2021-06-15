@@ -1,0 +1,10 @@
+.dot {
+    width: 500px;
+    cursor: pointer;
+    display: grid !important;
+    grid-auto-flow: column;
+    justify-items: center;
+    align-items: stretch;
+    margin: 0 auto;
+    flex-grow: 1;
+}

@@ -1,29 +1,31 @@
-import Layout from '../components/Layout'
 import React from "react";
 import { getSession } from 'next-auth/client';
 import { GetServerSidePropsContext } from 'next';
-import { Session } from 'next-auth';
+import { getCategories, getProducts } from '../utils';
+import ProductDisplay from '../components/ProductPreview';
 
-interface PageProps {
-    session: Session
-}
 
-export default function Page({ session }: PageProps) {
+export default function Page({ products = [], categories = [] }) {
     return (
-        <Layout>
-            This is the home page
-            <pre>{JSON.stringify(session, null, 2)}</pre>
-        </Layout>
+        <div className="flex flex-wrap justify-center">
+            {products.map(product => (
+                <ProductDisplay key={product.id} {...product} />
+            ))}
+        </div>
     )
 }
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
     const { req, res } = context
     const session = await getSession({ req })
-    
+    const products = await getProducts()
+    const categories = await getCategories()
+
     return {
         props: {
-            session
+            session,
+            products,
+            categories
         }
     }
 }

@@ -8,13 +8,13 @@ interface LoginProps {
 
 export default function Login({ providers }: LoginProps) {
     return (
-        <Layout title="Login">
+        <div>
             {Object.values(providers).map(provider => (
                 <div key={provider.name}>
                     <button onClick={() => signIn(provider.id)}>Sign in with {provider.name}</button>
                 </div>
             ))}
-        </Layout>
+        </div>
     )
 }
 
