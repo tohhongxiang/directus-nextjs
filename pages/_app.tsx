@@ -1,5 +1,5 @@
 import 'tailwindcss/tailwind.css'
-import "slick-carousel/slick/slick.css"; 
+import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { Provider } from 'next-auth/client'
 import React from 'react'

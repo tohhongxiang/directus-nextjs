@@ -4,7 +4,6 @@ import { GetServerSidePropsContext } from 'next';
 import { getCategories, getProducts } from '../utils';
 import ProductDisplay from '../components/ProductPreview';
 
-
 export default function Page({ products = [], categories = [] }) {
     return (
         <div className="flex flex-wrap justify-center">
@@ -16,14 +15,11 @@ export default function Page({ products = [], categories = [] }) {
 }
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-    const { req, res } = context
-    const session = await getSession({ req })
     const products = await getProducts()
     const categories = await getCategories()
 
     return {
         props: {
-            session,
             products,
             categories
         }

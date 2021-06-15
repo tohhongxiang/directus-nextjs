@@ -31,7 +31,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
         return { props: {} }
     }
 
-    
+
     const providers = await getProviders()
 
     return {

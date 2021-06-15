@@ -1,7 +1,12 @@
 import { API_URL } from "../constants"
+import { Product } from "../types/Product"
 import getCategory from "./getCategory"
 
-export default async function getProducts() {
+/**
+ * Gets all products from API
+ * @returns Product[]
+ */
+export default async function getProducts() : Promise<Product[]> {
     let { data } = await fetch(`${API_URL}/items/products?fields=*.*`).then(r => r.json())
     data = await Promise.all(data.map(async product => ({ 
         ...product, 
