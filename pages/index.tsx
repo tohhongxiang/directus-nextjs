@@ -1,7 +1,7 @@
 import React from "react";
 import { getSession } from 'next-auth/client';
 import { GetServerSidePropsContext } from 'next';
-import { getCategories, getProducts } from '../utils';
+import { getCategories, getProducts, serialize } from '../utils';
 import ProductDisplay from '../components/ProductPreview';
 
 export default function Page({ products = [], categories = [] }) {
