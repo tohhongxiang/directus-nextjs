@@ -11,7 +11,7 @@ export default function ProductPreview({ id, date_created, date_updated, price, 
     const [nav2, setNav2] = useState(null)
 
     return (
-        <div className="p-12 max-w-xl w-full relative">
+        <div className="max-w-xl w-full relative">
             <div className="flex flex-wrap items-center justify-between mb-4 gap-x-4">
                 <h3 className="font-bold text-lg">{name}</h3>
                 <p>$<span className="text-2xl font-semibold">{price}</span></p>
