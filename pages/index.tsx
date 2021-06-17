@@ -1,16 +1,17 @@
 import React from "react";
-import { getSession } from 'next-auth/client';
 import { GetServerSidePropsContext } from 'next';
-import { getCategories, getProducts, serialize } from '../utils';
-import ProductDisplay from '../components/ProductPreview';
+import { getCategories, getProducts } from '../utils';
+import { ProductPreview, Layout } from '../components';
 
 export default function Page({ products = [], categories = [] }) {
     return (
-        <div className="flex flex-wrap justify-center">
-            {products.map(product => (
-                <ProductDisplay key={product.id} {...product} />
-            ))}
-        </div>
+        <Layout>
+            <div className="flex flex-wrap gap-12 justify-center py-12">
+                {products.map(product => (
+                    <ProductPreview key={product.id} {...product} />
+                ))}
+            </div>
+        </Layout>
     )
 }
 

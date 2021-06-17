@@ -1,6 +1,6 @@
 import { GetServerSidePropsContext } from 'next'
 import { getProviders, signIn, ClientSafeProvider, getSession } from 'next-auth/client'
-import Layout from '../components/Layout'
+import { Layout } from '../components'
 
 interface LoginProps {
     providers: Record<string, ClientSafeProvider>
@@ -8,13 +8,13 @@ interface LoginProps {
 
 export default function Login({ providers }: LoginProps) {
     return (
-        <div>
+        <Layout title="Login">
             {Object.values(providers).map(provider => (
                 <div key={provider.name}>
                     <button onClick={() => signIn(provider.id)}>Sign in with {provider.name}</button>
                 </div>
             ))}
-        </div>
+        </Layout>
     )
 }
 
