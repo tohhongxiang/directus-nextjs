@@ -499,3 +499,4 @@ We will now also add another many-to-many field within `products` called `second
 - [Snipcart Getting Started](https://docs.snipcart.com/v3/setup/installation)
 - [Directus Assets](https://docs.directus.io/reference/api/assets/)
 - [SEO](https://snipcart.com/blog/react-nextjs-single-page-application-seo)
+- [Snipcart API](https://docs.snipcart.com/v3/api-reference/introduction)

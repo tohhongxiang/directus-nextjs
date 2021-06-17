@@ -4,9 +4,9 @@ import { Layout } from '../components'
 export default function contact() {
     return (
         <Layout>
-            <div className="flex flex-col items-center justify-center py-16 gap-8">
+            <div className="flex flex-col items-center justify-center py-16 px-4 gap-8">
                 <img src="/images/contact-us.jpg" alt="Contact Us" />
-                <h1 className="font-semibold text-5xl mb-8">Contact Us!</h1>
+                <h1 className="font-semibold text-5xl mb-8 text-center">Contact Us!</h1>
                 <ul className="text-lg text-gray-700 font-medium">
                     <li>Example Company</li>
                     <li>1 Lorem Ipsum Road 1, #01-34, Singapore 123456</li>

@@ -1,9 +1,7 @@
 import Link from 'next/link'
 import React from 'react'
 import { useState } from 'react'
-import { useRef } from 'react'
 import Slider from 'react-slick'
-import styles from './index.module.css'
 
 export default function ProductPreview({ id, date_created, date_updated, price, description, name, image, categories, thumbnail, secondary_images }) {
     const productImages = [image, ...secondary_images]
@@ -13,7 +11,7 @@ export default function ProductPreview({ id, date_created, date_updated, price, 
     return (
         <div className="max-w-xl w-full relative">
             <div className="flex flex-wrap items-center justify-between mb-4 gap-x-4">
-                <h3 className="font-bold text-lg">{name}</h3>
+                <Link href={`/products/${id}`}><h3 className="font-bold text-lg cursor-pointer hover:underline">{name}</h3></Link>
                 <p>$<span className="text-2xl font-semibold">{price}</span></p>
             </div>
             <div dangerouslySetInnerHTML={{ __html: description }} className="opacity-80 max-w-2xl" />
@@ -44,7 +42,6 @@ export default function ProductPreview({ id, date_created, date_updated, price, 
                 <button className="snipcart-add-item bg-blue-800 text-gray-100 hover:bg-blue-900 px-4 py-2 rounded-md font-semibold"
                     data-item-id={id}
                     data-item-price={price}
-                    data-item-description={description}
                     data-item-image={image}
                     data-item-name={name}
                     data-item-url={`/products/${id}`}

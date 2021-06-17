@@ -1,5 +1,5 @@
 import React from "react";
-import { GetServerSidePropsContext } from 'next';
+import { GetStaticPropsContext } from 'next';
 import { getCategories, getProducts } from '../utils';
 import { ProductPreview, Layout } from '../components';
 
@@ -15,7 +15,7 @@ export default function Page({ products = [], categories = [] }) {
     )
 }
 
-export async function getServerSideProps(context: GetServerSidePropsContext) {
+export async function getStaticProps(context: GetStaticPropsContext) {
     const products = await getProducts()
     const categories = await getCategories()
 
@@ -23,6 +23,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
         props: {
             products,
             categories
-        }
+        },
+        revalidate: 60
     }
 }

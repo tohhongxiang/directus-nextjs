@@ -74,6 +74,7 @@ export default function index({ products = [], categories = [] }) {
     const filtersMenuRef = useRef<HTMLDivElement>(null)
     useOnClickOutside(filtersMenuRef, () => setIsFiltersMenuOpen(false))
 
+    const areFiltersApplied = JSON.stringify(router.query) !== "{}"
     return (
         <Layout title="Products" enableFooter={false}>
             <div className="flex h-full">
@@ -131,7 +132,7 @@ export default function index({ products = [], categories = [] }) {
                     <div className="py-8 px-4">
                         <div className="flex items-baseline gap-x-8 mb-12">
                             <h1 className="font-bold text-2xl">All Products</h1>
-                            {JSON.stringify(router.query) !== "{}" && <button onClick={handleClearAll} className="font-semibold text-gray-600 rounded-md px-4 py-2 hover:bg-gray-200">Clear filters</button>}
+                            {areFiltersApplied && <button onClick={handleClearAll} className="font-semibold text-gray-600 rounded-md px-4 py-2 hover:bg-gray-200">Clear filters</button>}
                         </div>
                         {products.length > 0 ? (
                             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 items-around">
