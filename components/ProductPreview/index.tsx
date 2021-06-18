@@ -37,7 +37,7 @@ export default function ProductPreview({ id, date_created, date_updated, price, 
             </div>
             <div>
                 <ul className="flex flex-wrap gap-2 py-4">
-                    {categories.map((category) => <li key={category}><Link href={`/categories/${category}`}><button className="px-2 py-1 rounded-md bg-gray-200 text-gray-800 hover:bg-gray-400 font-semibold">{category}</button></Link></li>)}
+                    {categories.map((category) => <li key={category.id}><Link href={`/products?categories=${category.id}`}><button className="px-2 py-1 rounded-md bg-gray-200 text-gray-800 hover:bg-gray-400 font-semibold">{category.name}</button></Link></li>)}
                 </ul>
                 <button className="snipcart-add-item bg-blue-800 text-gray-100 hover:bg-blue-900 px-4 py-2 rounded-md font-semibold"
                     data-item-id={id}

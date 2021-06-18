@@ -1,5 +1,5 @@
 export interface Category {
     id: string,
     name: string
-    products: string[]
+    products: number[] // id array
 }

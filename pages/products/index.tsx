@@ -51,6 +51,7 @@ export default function index({ products = [], categories = [] }) {
     }
 
     useEffect(() => {
+        console.log("RUn")
         const markedCategories = router.query.categories as string[]
 
         if (markedCategories) {
