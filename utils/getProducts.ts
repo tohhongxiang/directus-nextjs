@@ -5,11 +5,13 @@ import serialize from "./serialize"
 
 /**
  * Gets all products from API
- * @params filter Filter condition
+ * https://docs.directus.io/reference/api/query/
+ * Follow the query parameters as an object
+ * @params query - Query object
  * @returns Product[]
  */
-export default async function getProducts<T extends { [key: string]: any }>(filter = {} as T): Promise<Product[]> {
-    const allParams = { fields: '*.*', ...filter }
+export default async function getProducts<T extends { [key: string]: any }>(query = {} as T): Promise<Product[]> {
+    const allParams = { fields: '*,image.id,categories.categories_id,secondary_images.directus_files_id', ...query }
     const fetchURL = `${API_URL}/items/products?${serialize(allParams)}`
     let { data } = await fetch(fetchURL).then(r => r.json())
     data = await Promise.all(data.map(async product => ({
