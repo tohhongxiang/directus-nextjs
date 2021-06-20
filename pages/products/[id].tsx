@@ -7,7 +7,7 @@ export default function id({ product }) {
     return (
         <Layout title={product.name}>
             <div className="flex flex-cols items-center justify-center py-16 px-8">
-                <ProductPreview {...product} />
+                <ProductPreview product={product} expanded />
             </div>
         </Layout>
     )

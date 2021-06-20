@@ -16,7 +16,7 @@ export default function Page({ products = [] }) {
                 <Link href="/products"><h2 className="font-bold text-3xl mb-4 hover:underline cursor-pointer"><a>Featured Products</a></h2></Link>
                 <div className="flex flex-wrap gap-12 justify-center py-12">
                     {products.map(product => (
-                        <ProductPreview key={product.id} {...product} />
+                        <ProductPreview key={product.id} product={product} />
                     ))}
                 </div>
             </section>

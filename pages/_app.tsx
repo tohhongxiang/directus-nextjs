@@ -1,6 +1,5 @@
 import 'tailwindcss/tailwind.css'
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
+import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Provider } from 'next-auth/client'
 import React from 'react'
 import SnipcartContextProvider from '../context/SnipcartContext';
