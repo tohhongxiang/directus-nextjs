@@ -14,7 +14,7 @@ export default function ProductPreview({ id, date_created, date_updated, price, 
                 <Link href={`/products/${id}`}><h3 className="font-bold text-lg cursor-pointer hover:underline">{name}</h3></Link>
                 <p>$<span className="text-2xl font-semibold">{price}</span></p>
             </div>
-            <div dangerouslySetInnerHTML={{ __html: description }} className="opacity-80 max-w-2xl" />
+            <div dangerouslySetInnerHTML={{ __html: description }} className="opacity-90 max-w-2xl prose prose-sm" />
             <div className="my-4">
                 <Slider
                     asNavFor={nav2}

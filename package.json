@@ -14,6 +14,7 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
+        "@tailwindcss/typography": "^0.4.1",
         "concurrently": "^6.2.0",
         "directus": "^9.0.0-rc.74",
         "next": "^10.2.3",

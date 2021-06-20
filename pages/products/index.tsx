@@ -82,8 +82,8 @@ export default function index({ products = [], categories = [] }) {
     const areFiltersApplied = JSON.stringify(router.query) !== "{}"
     return (
         <Layout title="Products" enableFooter={false}>
-            <div className="flex h-full">
-                <div className={`absolute z-10 h-full w-full flex justify-start ${isFiltersMenuOpen ? 'bg-opacity-80' : 'bg-opacity-0'} bg-black`}>
+            <div className="flex h-full relative">
+                <div className={`absolute h-full flex justify-start ${isFiltersMenuOpen ? 'bg-opacity-80 w-full z-10' : 'bg-opacity-0'} bg-black`}>
                     <div ref={filtersMenuRef} className="relative h-full bg-gray-100">
                         <button className={`rounded-full bg-gray-100 font-semibold p-4 ${isFiltersMenuOpen ? 'hidden' : 'block'}`} onClick={() => setIsFiltersMenuOpen(true)}>Filters</button>
                         <div className={`${isFiltersMenuOpen ? 'block' : 'hidden'}`}>
