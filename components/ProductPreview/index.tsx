@@ -1,9 +1,14 @@
 import Link from 'next/link'
 import React from 'react'
-import { useState } from 'react'
 import { Carousel } from 'react-responsive-carousel';
+import { Product } from '../../types';
 
-export default function ProductPreview({ product: { id, date_created, date_updated, price, description, name, image, categories, thumbnail, secondary_images }, expanded = false }) {
+interface ProductPreviewProps {
+    product: Product,
+    expanded?: boolean
+}
+
+export default function ProductPreview({ product: { id, date_created, date_updated, price, description, name, image, categories, thumbnail, secondary_images }, expanded = false }: ProductPreviewProps) {
     const productImages = [image, ...secondary_images]
 
     return (
@@ -13,8 +18,23 @@ export default function ProductPreview({ product: { id, date_created, date_updat
                 <p>$<span className="text-2xl font-semibold">{price}</span></p>
             </div>
             <div className="my-4">
-                <Carousel showStatus={false} showIndicators={false} autoPlay={false} showThumbs={productImages.length > 1} infiniteLoop>
-                    {productImages.map(img => <div key={img}><img className={"w-full mx-auto object-cover"} src={img} alt={name} /></div>)}
+                <Carousel className="" showStatus={false} showIndicators={false} autoPlay={false} showThumbs={productImages.length > 1} infiniteLoop dynamicHeight
+                    renderArrowPrev={(onClickHandler, hasPrev, label) =>
+                        hasPrev && (
+                            <button type="button" onClick={onClickHandler} title={label} className="absolute left-0 z-10 top-1/2 bg-gray-200 hover:bg-gray-300 p-2 rounded-full text-bold text-xl flex items-center justify-center">
+                                <img src="/icons/left.svg" alt="Prev"/>
+                            </button>
+                        )
+                    }
+                    renderArrowNext={(onClickHandler, hasNext, label) =>
+                        hasNext && (
+                            <button type="button" onClick={onClickHandler} title={label} className="absolute right-0 z-10 top-1/2 bg-gray-200 hover:bg-gray-300 p-2 rounded-full text-bold text-xl flex items-center justify-center">
+                                <img src="/icons/right.svg" alt="Next"/>
+                            </button>
+                        )
+                    }
+                >
+                    {productImages.map(img => <div key={img} className="flex items-center justify-center"><img src={img} alt={name} style={{ maxHeight: '400px', width: 'auto' }} /></div>)}
                 </Carousel>
             </div>
             <div dangerouslySetInnerHTML={{ __html: description }} className={`opacity-90 max-w-2xl prose prose-sm ${expanded ? '' : 'line-clamp-2'}`} />

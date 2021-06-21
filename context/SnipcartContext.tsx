@@ -34,6 +34,14 @@ export default function SnipcartContextProvider({ children }) {
             snipcart.events.on('customer.signedout', () => {
                 setCustomer(null)
             })
+
+            snipcart.events.on('cart.confirmed.error', confirmError => {
+                console.log("Confirm error", confirmError)
+            })
+
+            snipcart.events.on('cart.confirmed', confirmResponse => {
+                console.log(confirmResponse)
+            })
         }
 
         document.addEventListener('snipcart.ready', handler)
