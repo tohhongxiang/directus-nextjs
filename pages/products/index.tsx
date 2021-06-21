@@ -7,8 +7,15 @@ import Layout from '../../components/Layout'
 import ProductPreview from '../../components/ProductPreview'
 import { useOnClickOutside } from '../../hooks'
 import { getCategories, getProducts } from '../../utils'
+import Link from 'next/link'
+import { Category, Product } from '../../types'
 
-export default function index({ products = [], categories = [] }) {
+interface PageProps {
+    products: Product[],
+    categories: Category[]
+}
+
+export default function index({ products = [], categories = [] }: PageProps) {
     const [search, setSearch] = useState('')
 
     const router = useRouter()
@@ -143,7 +150,7 @@ export default function index({ products = [], categories = [] }) {
                         </div>
                         {products.length > 0 ? (
                             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 items-around">
-                                {products.map(product => <ProductPreview key={product.id} product={product} />)}
+                                {products.map(product => <Link href={`/products/${[product.id]}`}><ProductPreview key={product.id} product={product} /></Link>)}
                             </div>
                         ) : <p className="text-center font-bold text-2xl text-gray-600">No products found...</p>}
                     </div>
