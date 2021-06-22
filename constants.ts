@@ -1,4 +1,4 @@
-const API_URL = `${process.env.BASE_URL}:${process.env.PORT}`
+const API_URL = `${process.env.DIRECTUS_URL}`
 
 export {
     API_URL

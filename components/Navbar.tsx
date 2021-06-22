@@ -1,4 +1,3 @@
-import { useSession, signOut, signIn } from 'next-auth/client'
 import React, { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -42,14 +41,10 @@ export default function Navbar() {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false)
     useOnClickOutside(dropDownRef, () => setIsDropdownOpen(false))
 
-    const [session, isLoading] = useSession();
     const router = useRouter()
 
-    const isLoggedIn = session !== null
-    const user = session?.user
-
-    // const { customer } = useSnipcart()
     const { customer } = useContext(SnipcartContext)
+    const isLoggedIn = customer !== null
     return (
         <nav className="bg-gray-800 relative" ref={navRef}>
             <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
@@ -98,28 +93,6 @@ export default function Navbar() {
                         </div>
                     </div>
                     <button className="snipcart-customer-signin"><a className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">{customer ? customer.billingAddress.fullName : "Login"}</a></button>
-                    {/* <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-                        <div className="ml-3 relative flex items-center" ref={dropDownRef}>
-                            {isLoading ? (
-                                <p className="text-gray-300">Loading...</p>
-                            ) : isLoggedIn ? (
-                                <div className="">
-                                    <button onClick={() => setIsDropdownOpen(c => !c)} type="button" className="flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white" id="user-menu-button" aria-expanded="false" aria-haspopup="true">
-                                        <img className="h-8 w-8 rounded-full" src={user?.image} alt="" />
-                                        <span className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium hidden sm:block">{user?.name}</span>
-                                    </button>
-                                    {isDropdownOpen && <div className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabIndex={-1}>
-                                        {DROPDOWN_LINKS.map(link => (
-                                            <Link href={link.link} key={link.link}><a className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem" tabIndex={-1}>{link.name}</a></Link>
-                                        ))}
-                                        <a className="block px-4 py-2 text-sm text-gray-700 cursor-pointer hover:bg-gray-100" role="menuitem" tabIndex={-1} onClick={() => signOut()}>Sign out</a>
-                                    </div>}
-                                </div>
-                            ) : (
-                                <button onClick={() => signIn()}><a className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Login</a></button>
-                            )}
-                        </div>
-                    </div> */}
                 </div>
             </div>
 

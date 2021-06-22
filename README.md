@@ -1,3 +1,45 @@
+# Setup from a clean ubuntu
+
+1. From local, create a database dump and copy into remote
+
+```
+pg_dump next-auth-client > directus-dump 
+scp directus-dump username@host:/home/user/directus-dump
+```
+
+2. Update all packages. Install postgres and relevant packages. Create a new database, and dump data into the database.
+
+```
+sudo apt update
+sudo apt install postgresql postgresql-contrib
+sudo -u postgres createdb shopping-seshuri
+sudo -u postgres psql shopping-seshuri < directus-dump
+```
+
+3. Create a new postgres user. Check that the user exists with the command `\du`
+
+```
+sudo -su postgres psql
+CREATE USER username WITH SUPERUSER PASSWORD 'password'
+\du
+\q
+```
+
+4. Clone the repository, and install required packages
+
+```
+git clone https://github.com/tohhongxiang123/directus-nextjs.git
+cd directus-nextjs
+npm ci
+```
+
+5. Create `.env` file and fill it in
+
+```
+touch .env
+nano .env
+```
+
 # Overview
 
 We are going to create an e-commerce application with the following stack:
