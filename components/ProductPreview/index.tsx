@@ -8,8 +8,14 @@ interface ProductPreviewProps {
     expanded?: boolean
 }
 
-export default function ProductPreview({ product: { id, date_created, date_updated, price, description, name, image, categories, thumbnail, secondary_images }, expanded = false }: ProductPreviewProps) {
+export default function ProductPreview({ product: { id, date_created, date_updated, price, description, name, image, categories, thumbnail, secondary_images, quantity, options }, expanded = false }: ProductPreviewProps) {
     const productImages = expanded ? [image, ...secondary_images] : [image]
+
+    const dataOptions = {}
+    Object.entries(options).forEach(([key, value], index) => {
+        dataOptions[`data-item-custom${index + 1}-name`] = key
+        dataOptions[`data-item-custom${index + 1}-options`] = value 
+    })
 
     const PRODUCT_HEADER = (
         <div className={`flex flex-row flex-wrap ${expanded ? 'items-baseline' : 'items-center'} justify-between mb-4 gap-x-8 max-w-lg`}>
@@ -47,7 +53,7 @@ export default function ProductPreview({ product: { id, date_created, date_updat
                 <div dangerouslySetInnerHTML={{ __html: description }} className={`opacity-90 prose prose-sm ${expanded ? '' : 'line-clamp-2'}`} />
                 <div>
                     <ul className="flex flex-wrap gap-2 py-4">
-                        {categories.map((category) => <li key={category.id}><Link href={`/products?categories=${category.id}`}><button className="px-2 py-1 rounded-md bg-gray-200 text-gray-800 hover:bg-gray-400 font-semibold">{category.name}</button></Link></li>)}
+                        {categories.map((category) => <Link href={`/products?categories=${category.id}`} key={category.id}><li><button className="px-2 py-1 rounded-md bg-gray-200 text-gray-800 hover:bg-gray-400 font-semibold">{category.name}</button></li></Link>)}
                     </ul>
                     <button className="snipcart-add-item bg-blue-800 text-gray-100 hover:bg-blue-900 px-4 py-2 rounded-md font-semibold"
                         data-item-id={id}
@@ -55,6 +61,7 @@ export default function ProductPreview({ product: { id, date_created, date_updat
                         data-item-image={image}
                         data-item-name={name}
                         data-item-url={`/products/${id}`}
+                        {...dataOptions}
                     >Add item ($<span className="font-semibold">{price}</span>)</button>
                 </div>
             </div>

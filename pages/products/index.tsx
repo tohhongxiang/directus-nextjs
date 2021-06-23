@@ -152,7 +152,7 @@ export default function index({ products = [], categories = [] }: PageProps) {
                         </div>
                         {products.length > 0 ? (
                             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 items-start">
-                                {products.map(product => <Link href={`/products/${product.id}`}><ProductPreview key={product.id} product={product} /></Link>)}
+                                {products.map(product => <ProductPreview key={product.id} product={product} />)}
                             </div>
                         ) : <p className="text-center font-bold text-2xl text-gray-600">No products found...</p>}
                     </div>
