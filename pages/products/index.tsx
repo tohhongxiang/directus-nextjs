@@ -92,7 +92,6 @@ export default function index({ products = [], categories = [] }: PageProps) {
             <div className="flex h-full relative">
                 <div className={`absolute h-full flex justify-start ${isFiltersMenuOpen ? 'bg-opacity-80 w-full z-10' : 'bg-opacity-0'} bg-black`}>
                     <div ref={filtersMenuRef} className="relative h-full bg-gray-100">
-                        <button className={`rounded-full bg-gray-100 font-semibold p-4 ${isFiltersMenuOpen ? 'hidden' : 'block'}`} onClick={() => setIsFiltersMenuOpen(true)}>Filters</button>
                         <div className={`${isFiltersMenuOpen ? 'block' : 'hidden'}`}>
                             <button className="p-4 rounded absolute top-0 right-0" onClick={() => setIsFiltersMenuOpen(false)}>×</button>
                             <form className={`px-8 pt-6 pb-8 mb-4 max-w-lg mx-auto border-b border-gray-200`} onSubmit={handleTextSearch}>
@@ -142,15 +141,18 @@ export default function index({ products = [], categories = [] }: PageProps) {
                         </div>
                     </div>
                 </div>
-                <div className="overflow-y-auto overflow-x-hidden w-full ml-28">
+                <div className="overflow-y-auto overflow-x-hidden w-full">
                     <div className="py-8 px-4">
-                        <div className="flex items-baseline gap-x-8 mb-12">
-                            <h1 className="font-bold text-2xl">All Products</h1>
-                            {areFiltersApplied && <button onClick={handleClearAll} className="font-semibold text-gray-600 rounded-md px-4 py-2 hover:bg-gray-200">Clear filters</button>}
+                        <div className="flex flex-col items-baseline gap-x-8 mb-12">
+                            <h1 className="font-bold text-2xl mb-4">All Products</h1>
+                            <div className="flex justify-start w-full">
+                                <button className={`rounded-md bg-gray-100 hover:bg-gray-200 font-semibold px-4 py-2 ${isFiltersMenuOpen ? 'hidden' : 'block'}`} onClick={() => setIsFiltersMenuOpen(true)}>Filters</button>
+                                {areFiltersApplied && <button onClick={handleClearAll} className="font-semibold text-gray-600 rounded-md px-4 py-2 hover:text-gray-900 hover:underline focus:outline-none">Clear filters</button>}
+                            </div>
                         </div>
                         {products.length > 0 ? (
-                            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 items-around">
-                                {products.map(product => <Link href={`/products/${[product.id]}`}><ProductPreview key={product.id} product={product} /></Link>)}
+                            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 items-start">
+                                {products.map(product => <Link href={`/products/${product.id}`}><ProductPreview key={product.id} product={product} /></Link>)}
                             </div>
                         ) : <p className="text-center font-bold text-2xl text-gray-600">No products found...</p>}
                     </div>

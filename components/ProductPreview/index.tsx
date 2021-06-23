@@ -9,10 +9,10 @@ interface ProductPreviewProps {
 }
 
 export default function ProductPreview({ product: { id, date_created, date_updated, price, description, name, image, categories, thumbnail, secondary_images }, expanded = false }: ProductPreviewProps) {
-    const productImages = [image, ...secondary_images]
+    const productImages = expanded ? [image, ...secondary_images] : [image]
 
     const PRODUCT_HEADER = (
-        <div className={`flex flex-col sm:flex-row ${expanded ? 'items-start' : 'items-center'} justify-between mb-4 gap-x-8 max-w-lg`}>
+        <div className={`flex flex-row flex-wrap ${expanded ? 'items-baseline' : 'items-center'} justify-between mb-4 gap-x-8 max-w-lg`}>
             <Link href={`/products/${id}`}><h3 className="font-bold text-lg cursor-pointer hover:underline">{name}</h3></Link>
             <p>$<span className="text-2xl font-semibold">{price}</span></p>
         </div>
@@ -25,14 +25,14 @@ export default function ProductPreview({ product: { id, date_created, date_updat
                     <Carousel className="" showStatus={false} showIndicators={false} autoPlay={false} showThumbs={productImages.length > 1} infiniteLoop dynamicHeight
                         renderArrowPrev={(onClickHandler, hasPrev, label) =>
                             hasPrev && (
-                                <button type="button" onClick={onClickHandler} title={label} className="absolute left-0 z-10 top-1/2 bg-gray-200 hover:bg-gray-300 p-2 rounded-full text-bold text-xl flex items-center justify-center">
+                                <button type="button" onClick={onClickHandler} title={label} style={{ zIndex: 1 }} className="absolute left-0 top-1/2 bg-gray-200 hover:bg-gray-300 p-2 rounded-full text-bold text-xl flex items-center justify-center">
                                     <img src="/icons/left.svg" alt="Prev" />
                                 </button>
                             )
                         }
                         renderArrowNext={(onClickHandler, hasNext, label) =>
                             hasNext && (
-                                <button type="button" onClick={onClickHandler} title={label} className="absolute right-0 z-10 top-1/2 bg-gray-200 hover:bg-gray-300 p-2 rounded-full text-bold text-xl flex items-center justify-center">
+                                <button type="button" onClick={onClickHandler} title={label} style={{ zIndex: 1 }} className="absolute right-0 top-1/2 bg-gray-200 hover:bg-gray-300 p-2 rounded-full text-bold text-xl flex items-center justify-center">
                                     <img src="/icons/right.svg" alt="Next" />
                                 </button>
                             )
