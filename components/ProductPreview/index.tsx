@@ -8,7 +8,9 @@ interface ProductPreviewProps {
     expanded?: boolean
 }
 
-export default function ProductPreview({ product: { id, date_created, date_updated, price, description, name, image, categories, thumbnail, secondary_images, quantity, options }, expanded = false }: ProductPreviewProps) {
+export default function ProductPreview({ product: { 
+    id, date_created, date_updated, price, description, name, image, categories = [], thumbnail, secondary_images = [], options = {} 
+}, expanded = false }: ProductPreviewProps) {
     const productImages = expanded ? [image, ...secondary_images] : [image]
 
     const dataOptions = {}
@@ -50,12 +52,12 @@ export default function ProductPreview({ product: { id, date_created, date_updat
             </div>
             <div className="max-w-xl flex-shrink">
                 {expanded && PRODUCT_HEADER}
-                <div dangerouslySetInnerHTML={{ __html: description }} className={`opacity-90 prose prose-sm ${expanded ? '' : 'line-clamp-2'}`} />
+                <div dangerouslySetInnerHTML={{ __html: description }} className={`opacity-90 prose prose-sm mb-4 ${expanded ? '' : 'line-clamp-2'}`} />
                 <div>
                     <ul className="flex flex-wrap gap-2 py-4">
                         {categories.map((category) => <Link href={`/products?categories=${category.id}`} key={category.id}><li><button className="px-2 py-1 rounded-md bg-gray-200 text-gray-800 hover:bg-gray-400 font-semibold">{category.name}</button></li></Link>)}
                     </ul>
-                    <button className="snipcart-add-item bg-blue-800 text-gray-100 hover:bg-blue-900 px-4 py-2 rounded-md font-semibold"
+                    <button className={`snipcart-add-item bg-blue-800 text-gray-100 hover:bg-blue-900 px-4 py-2 rounded-md font-semibold`}
                         data-item-id={id}
                         data-item-price={price}
                         data-item-image={image}

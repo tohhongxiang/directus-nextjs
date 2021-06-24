@@ -11,6 +11,5 @@ export interface Product {
     secondary_images: string[];
     categories: Category[];
     thumbnail: string;
-    quantity: string;
     options: { [key:string]: string }
 }

@@ -3,8 +3,8 @@
 1. From local, create a database dump and copy into remote
 
 ```
-pg_dump next-auth-client > directus-dump 
-scp directus-dump username@host:/home/user/directus-dump
+pg_dump -U postgres next-auth-client > directus-dump 
+scp directus-dump username@host:/home/username/directus-dump
 ```
 
 2. Update all packages. Install postgres and relevant packages. Create a new database, and dump data into the database.
@@ -25,7 +25,22 @@ CREATE USER username WITH SUPERUSER PASSWORD 'password'
 \q
 ```
 
-4. Clone the repository, and install required packages
+4. Create database and dump data within database
+
+```
+createdb shopping-seshuri
+psql shopping-seshuri < directus-dump
+```
+
+To check whether the database is updated, you can run the following commands:
+
+```
+sudo -su postgres psql
+\c shopping-seshuri
+\d products
+```
+
+5. Clone the repository, and install required packages
 
 ```
 git clone https://github.com/tohhongxiang123/directus-nextjs.git
@@ -33,7 +48,7 @@ cd directus-nextjs
 npm ci
 ```
 
-5. Create `.env` file and fill it in
+6. Create `.env` file and fill it in
 
 ```
 touch .env
