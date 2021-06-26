@@ -43,7 +43,7 @@ export default function Pagination({ currentPage, pageLimit, totalCount }: Pagin
     
 
     return (
-        <div className="flex flex-wrap justify-end items-center space-x-4">
+        <div className="flex flex-wrap items-center space-x-4">
             <p className="my-4">Page <strong>{currentPage}/{lastPage}, Items <strong>{firstItemIndex + 1} - {lastItemIndex}</strong> of {totalCount}</strong></p>
             <nav className="relative z-0 inline-flex flex-wrap rounded-md shadow-sm -space-x-px mx-auto" aria-label="Pagination">
                 {currentPage <= 1 || <button onClick={() => handlePagination(-1)} className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">

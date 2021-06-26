@@ -161,7 +161,9 @@ export default function index({ products = [], categories = [], totalCount }: Pa
                                 {products.map(product => <ProductPreview key={product.id} product={product} />)}
                             </div>
                         ) : <p className="text-center font-bold text-2xl text-gray-600">No products found...</p>}
-                        <Pagination currentPage={currentPage} totalCount={totalCount} pageLimit={limit} />
+                        <div className="flex justify-end">
+                            <Pagination currentPage={currentPage} totalCount={totalCount} pageLimit={limit} />
+                        </div>
                     </div>
                     <Footer />
                 </div>
