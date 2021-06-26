@@ -25,7 +25,7 @@ export default function Page({ products = [] }) {
 }
 
 export async function getStaticProps(context: GetStaticPropsContext) {
-    const products = await getProducts({ filter: { featured: { _eq: true } } })
+    const { data: products } = await getProducts({ filter: { featured: { _eq: true } } })
 
     return {
         props: {

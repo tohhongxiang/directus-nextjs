@@ -10,10 +10,13 @@ import serialize from "./serialize"
  * @params query - Query object
  * @returns Product[]
  */
-export default async function getProducts<T extends { [key: string]: any }>(query = {} as T): Promise<Product[]> {
-    const allParams = { fields: '*,image.id,categories.categories_id,secondary_images.directus_files_id', ...query }
-    const fetchURL = `${API_URL}/items/products?${serialize(allParams)}`
-    let { data } = await fetch(fetchURL).then(r => r.json())
+export default async function getProducts<T extends { [key: string]: any }>(query = {} as T): Promise<{ data: Product[], meta: { filter_count: number } }> {
+    const allParams = {
+        fields: '*,image.id,categories.categories_id,secondary_images.directus_files_id',
+        meta: 'filter_count',
+        ...query
+    }
+    let { data, meta } = await fetch(`${API_URL}/items/products?${serialize(allParams)}`).then(r => r.json())
     data = await Promise.all(data.map(async product => ({
         ...product,
         image: `${API_URL}/assets/${product.image.id}`,
@@ -22,7 +25,7 @@ export default async function getProducts<T extends { [key: string]: any }>(quer
         categories: (await Promise.all(product.categories.map(category => getCategory(category.categories_id))))
     })))
 
-    return data
+    return { data, meta }
 }
 
 // get all products who has includes categories_id = 4

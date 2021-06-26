@@ -7,15 +7,19 @@ import Layout from '../../components/Layout'
 import ProductPreview from '../../components/ProductPreview'
 import { useOnClickOutside } from '../../hooks'
 import { getCategories, getProducts } from '../../utils'
-import Link from 'next/link'
 import { Category, Product } from '../../types'
+import Pagination from '../../components/Pagination'
 
 interface PageProps {
     products: Product[],
-    categories: Category[]
+    categories: Category[],
+    totalCount: number
 }
 
-export default function index({ products = [], categories = [] }: PageProps) {
+const DEFAULT_LIMIT = 100
+const DEFAULT_PAGE = 1
+
+export default function index({ products = [], categories = [], totalCount }: PageProps) {
     const [search, setSearch] = useState('')
 
     const router = useRouter()
@@ -86,7 +90,9 @@ export default function index({ products = [], categories = [] }: PageProps) {
     const filtersMenuRef = useRef<HTMLDivElement>(null)
     useOnClickOutside(filtersMenuRef, () => setIsFiltersMenuOpen(false))
 
-    const areFiltersApplied = JSON.stringify(router.query) !== "{}"
+    const currentPage = parseInt(router.query.page as string ?? DEFAULT_PAGE.toString())
+    const limit = parseInt(router.query.limit as string ?? DEFAULT_LIMIT.toString())
+
     return (
         <Layout title="Products" enableFooter={false}>
             <div className="flex h-full relative">
@@ -147,7 +153,7 @@ export default function index({ products = [], categories = [] }: PageProps) {
                             <h1 className="font-bold text-2xl mb-4">All Products</h1>
                             <div className="flex justify-start w-full">
                                 <button className={`rounded-md bg-gray-100 hover:bg-gray-200 font-semibold px-4 py-2 ${isFiltersMenuOpen ? 'hidden' : 'block'}`} onClick={() => setIsFiltersMenuOpen(true)}>Filters</button>
-                                {areFiltersApplied && <button onClick={handleClearAll} className="font-semibold text-gray-600 rounded-md px-4 py-2 hover:text-gray-900 hover:underline focus:outline-none">Clear filters</button>}
+                                <button onClick={handleClearAll} className="font-semibold text-gray-600 rounded-md px-4 py-2 hover:text-gray-900 hover:underline focus:outline-none">Clear filters</button>
                             </div>
                         </div>
                         {products.length > 0 ? (
@@ -155,6 +161,7 @@ export default function index({ products = [], categories = [] }: PageProps) {
                                 {products.map(product => <ProductPreview key={product.id} product={product} />)}
                             </div>
                         ) : <p className="text-center font-bold text-2xl text-gray-600">No products found...</p>}
+                        <Pagination currentPage={currentPage} totalCount={totalCount} pageLimit={limit} />
                     </div>
                     <Footer />
                 </div>
@@ -164,24 +171,27 @@ export default function index({ products = [], categories = [] }: PageProps) {
 }
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-    const params = {} as { [key: string]: any }
-    const textSearch = context.query.search as string
+    const { search: textSearch, categories: categoriesSearch, page, limit, ...params }: any = context.query
+
+    params.page = page ? page : DEFAULT_PAGE
+    params.limit = limit ? limit : DEFAULT_LIMIT
+
     if (textSearch) {
         params.search = textSearch
     }
 
-    const categoriesSearch = context.query.categories as string[]
     if (categoriesSearch) {
         params.filter = { categories: { categories_id: { _in: categoriesSearch } } }
     }
 
-    const products = await getProducts(params)
-    const categories = await getCategories()
+    const { data: products, meta: { filter_count } } = await getProducts(params)
+    const { data: categories } = await getCategories()
 
     return {
         props: {
             products,
-            categories
+            categories,
+            totalCount: filter_count
         }
     }
 }
