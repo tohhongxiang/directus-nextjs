@@ -7,7 +7,7 @@ import Link from 'next/link'
 export default function Page({ products = [] }) {
     return (
         <Layout>
-            <section className="flex flex-col justify-center items-center px-4 py-16 my-16">
+            <section className="flex flex-col justify-center items-center px-4 py-32 text-gray-100" style={{ background: `linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('/images/hero-banner.jpg')`, backgroundPosition: 'center' }}>
                 <h1 className="font-bold text-3xl mb-4">Lorem Ipsum</h1>
                 <p className="font-light opacity-80 tracking-wide max-w-2xl text-center mb-8">Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatem sint obcaecati dolores in sapiente odio impedit vero nemo? Perferendis odit tempora cum voluptatibus, molestias ipsam exercitationem illum perspiciatis. Accusamus, quod.</p>
                 <Link href="/products"><button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">See our Products</button></Link>
@@ -15,9 +15,9 @@ export default function Page({ products = [] }) {
             <section className="flex flex-col justify-center items-center px-4 py-16 bg-gray-50">
                 <Link href="/products"><h2 className="font-bold text-3xl mb-4 hover:underline cursor-pointer text-center"><a>Featured Products</a></h2></Link>
                 <div className="flex flex-wrap gap-12 justify-center items-start py-12">
-                    {products.map(product => (
+                    {products.length > 0 ? products.map(product => (
                         <ProductPreview key={product.id} product={product} />
-                    ))}
+                    )) : <p className="text-lg font-semibold opacity-60"><i>No products found</i></p>}
                 </div>
             </section>
         </Layout>
