@@ -9,6 +9,7 @@ import { useOnClickOutside } from '../../hooks'
 import { getCategories, getProducts } from '../../utils'
 import { Category, Product } from '../../types'
 import Pagination from '../../components/Pagination'
+import Link from 'next/link'
 
 interface PageProps {
     products: Product[],
@@ -92,11 +93,11 @@ export default function index({ products = [], categories = [], totalCount }: Pa
 
     const currentPage = parseInt(router.query.page as string ?? DEFAULT_PAGE.toString())
     const limit = parseInt(router.query.limit as string ?? DEFAULT_LIMIT.toString())
-
+    const areFiltersActive = JSON.stringify(router.query) !== "{}"
     return (
         <Layout title="Products" enableFooter={false}>
             <div className="flex h-full relative">
-                <div className={`absolute h-full flex justify-start ${isFiltersMenuOpen ? 'bg-opacity-80 w-full z-10' : 'bg-opacity-0'} bg-black`}>
+                <div className={`absolute h-full flex justify-start ${isFiltersMenuOpen ? 'bg-opacity-80 w-full z-10' : 'bg-opacity-0'} bg-black`} aria-expanded={isFiltersMenuOpen} role="menu" id="filtersMenu" aria-labelledby="filtersMenuButton">
                     <div ref={filtersMenuRef} className="relative h-full bg-gray-100">
                         <div className={`${isFiltersMenuOpen ? 'block' : 'hidden'}`}>
                             <button className="p-4 rounded absolute top-0 right-0" onClick={() => setIsFiltersMenuOpen(false)}>×</button>
@@ -107,12 +108,12 @@ export default function index({ products = [], categories = [], totalCount }: Pa
                                     </label>
                                     <div className="flex flex-row">
                                         <div className="relative flex flex-row items-center justify-center">
-                                            <input value={search} onChange={e => setSearch(e.target.value)} className="appearance-none border rounded-l w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="search" type="text" placeholder="Search" />
+                                            <input value={search} onChange={e => setSearch(e.target.value)} className="appearance-none border rounded-l w-full py-2 px-3 text-gray-700 leading-tight focus:shadow-outline" id="search" type="text" placeholder="Search" />
                                             {search.length > 0 && <button className="z-10 h-full text-center absolute right-0 pr-4 opacity-70 hover:opacity:100 font-bold" type="button" onClick={handleClearText}>
                                                 ×
                                             </button>}
                                         </div>
-                                        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold p-2 rounded-r focus:outline-none focus:shadow-outline" type="submit">
+                                        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold p-2 rounded-r focus:shadow-outline" type="submit">
                                             <img src="/icons/search.svg" alt="search" />
                                         </button>
                                     </div>
@@ -133,17 +134,17 @@ export default function index({ products = [], categories = [], totalCount }: Pa
                                             </div>
                                         ))}
                                         <div className="mt-4 flex flex-col items-center justify-center gap-y-2">
-                                            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+                                            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:shadow-outline" type="submit">
                                                 Search
                                             </button>
-                                            <a className="cursor-pointer font-semibold text-gray-600 hover:text-gray-700 hover:underline" type="button" onClick={handleClearCategories}>
+                                            <button className="cursor-pointer font-semibold text-gray-600 hover:text-gray-700 hover:underline" type="button" onClick={handleClearCategories}>
                                                 Clear categories
-                                            </a>
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
                             </form>
-                            <button onClick={handleClearAll} className="block mx-auto bg-blue-500 hover:bg-blue-700 text-white font-bold p-2 rounded focus:outline-none focus:shadow-outline">Clear all filters</button>
+                            <button onClick={handleClearAll} className="block mx-auto bg-blue-500 hover:bg-blue-700 text-white font-bold p-2 rounded focus:shadow-outline">Clear all filters</button>
                         </div>
                     </div>
                 </div>
@@ -151,13 +152,13 @@ export default function index({ products = [], categories = [], totalCount }: Pa
                     <div className="py-8 px-4">
                         <div className="flex flex-col items-baseline gap-x-8 mb-12">
                             <h1 className="font-bold text-2xl mb-4">All Products</h1>
-                            <div className="flex justify-start w-full">
-                                <button className={`rounded-md bg-gray-100 hover:bg-gray-200 font-semibold px-4 py-2 ${isFiltersMenuOpen ? 'hidden' : 'block'}`} onClick={() => setIsFiltersMenuOpen(true)}>Filters</button>
-                                <button onClick={handleClearAll} className="font-semibold text-gray-600 rounded-md px-4 py-2 hover:text-gray-900 hover:underline focus:outline-none">Clear filters</button>
+                            <div className="flex justify-start w-full gap-4">
+                                <button id="filtersMenuButton" className={`rounded-md bg-gray-100 hover:bg-gray-200 font-semibold px-4 py-2 ${isFiltersMenuOpen ? 'hidden' : 'block'}`} onClick={() => setIsFiltersMenuOpen(true)} aria-haspopup={true} aria-controls="filtersMenu">Filters & Search</button>
+                                {areFiltersActive && <button onClick={handleClearAll} className="font-semibold text-gray-600 rounded-md px-4 py-2 hover:text-gray-900 hover:underline">Clear filters</button>}
                             </div>
                         </div>
                         {products.length > 0 ? (
-                            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 items-start">
+                            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-12 items-start">
                                 {products.map(product => <ProductPreview key={product.id} product={product} />)}
                             </div>
                         ) : <p className="text-center font-bold text-2xl text-gray-600">No products found...</p>}

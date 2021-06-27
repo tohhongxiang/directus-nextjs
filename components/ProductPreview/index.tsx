@@ -20,12 +20,13 @@ export default function ProductPreview({ product: {
     })
 
     const PRODUCT_HEADER = (
-        <div className={`flex flex-row flex-wrap ${expanded ? 'items-baseline' : 'items-center'} justify-between mb-4 gap-x-8 max-w-lg`}>
-            <Link href={`/products/${id}`}><h3 className="font-bold text-lg cursor-pointer hover:underline">{name}</h3></Link>
+        <div className={`flex flex-row flex-wrap ${expanded ? 'items-baseline' : 'items-center'} justify-between mb-4 gap-x-8`}>
+            <Link href={`/products/${id}`}><h3 className="font-medium text-lg cursor-pointer hover:underline opacity-90">{name}</h3></Link>
             <p>$<span className="text-2xl font-semibold">{price}</span></p>
         </div>
     )
-    return (
+    
+    const productDisplay = (
         <div className={`w-full relative flex justify-center ${expanded ? 'flex-wrap' : 'max-w-xl flex-col'} gap-4`}>
             <div className="max-w-xl w-full flex-shrink">
                 {!expanded && PRODUCT_HEADER}
@@ -50,7 +51,7 @@ export default function ProductPreview({ product: {
                     </Carousel>
                 </div>
             </div>
-            <div className="max-w-xl flex-shrink">
+            {expanded && <div className="max-w-xl flex-shrink">
                 {expanded && PRODUCT_HEADER}
                 <div dangerouslySetInnerHTML={{ __html: description }} className={`opacity-90 prose prose-sm mb-4 ${expanded ? '' : 'line-clamp-2'}`} />
                 <div>
@@ -66,7 +67,13 @@ export default function ProductPreview({ product: {
                         {...dataOptions}
                     >Add item ($<span className="font-semibold">{price}</span>)</button>
                 </div>
-            </div>
+            </div>}
         </div >
     )
+
+    if (expanded) {
+        return productDisplay
+    }
+
+    return <Link href={`/products/${id}`}><a>{productDisplay}</a></Link>
 }
