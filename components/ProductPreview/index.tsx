@@ -9,14 +9,14 @@ interface ProductPreviewProps {
 }
 
 export default function ProductPreview({ product: { 
-    id, date_created, date_updated, price, description, name, image, categories = [], thumbnail, secondary_images = [], options = {} 
+    id, date_created, date_updated, price, description, name, image, categories = [], thumbnail, secondary_images = [], custom_fields = []
 }, expanded = false }: ProductPreviewProps) {
     const productImages = expanded ? [image, ...secondary_images] : [image]
 
-    const dataOptions = {}
-    Object.entries(options).forEach(([key, value], index) => {
-        dataOptions[`data-item-custom${index + 1}-name`] = key
-        dataOptions[`data-item-custom${index + 1}-options`] = value 
+    const dataCustomFields = {}
+    custom_fields.forEach(({ name, options }, index) => {
+        dataCustomFields[`data-item-custom${index + 1}-name`] = name
+        dataCustomFields[`data-item-custom${index + 1}-options`] = options.join('|')
     })
 
     const PRODUCT_HEADER = (
@@ -64,7 +64,7 @@ export default function ProductPreview({ product: {
                         data-item-image={image}
                         data-item-name={name}
                         data-item-url={`/products/${id}`}
-                        {...dataOptions}
+                        {...dataCustomFields}
                     >Add item ($<span className="font-semibold">{price}</span>)</button>
                 </div>
             </div>}
