@@ -13,9 +13,7 @@ interface ProductPreviewProps {
 export default function ProductPreview({ product: {
     id, date_created, date_updated, price, description, name, image, categories = [], thumbnail, secondary_images = [], custom_fields = []
 }, expanded = false }: ProductPreviewProps) {
-    const productImages = expanded ? [image, ...secondary_images] : [image]
-
-
+    const [quantity, setQuantity] = useState(1)
     const [dataCustomFields, setDataCustomFields] = useState(() => {
         const result = {}
         custom_fields.map(({ name, options }, index) => {
@@ -37,6 +35,7 @@ export default function ProductPreview({ product: {
         </div>
     )
 
+    const productImages = expanded ? [image, ...secondary_images] : [image]
     const productDisplay = (
         <div className={`w-full relative flex justify-center ${expanded ? 'flex-wrap' : 'max-w-xl flex-col'} gap-4`}>
             <div className="max-w-xl w-full flex-shrink">
@@ -81,6 +80,16 @@ export default function ProductPreview({ product: {
                                     </div>
                                 ))}
                             </div>
+                            <div>
+                                <label htmlFor={"quantity"} className="block text-sm font-medium text-gray-700">
+                                    Quantity
+                                </label>
+                                <input type="number" value={quantity}
+                                    id={"quantity"} className="shadow-md p-2 border border-gray-300 rounded-md inline"
+                                    onChange={e => setQuantity(parseInt(e.target.value))}
+                                    style={{ width: '60px' }}
+                                />
+                            </div>
                         </div>
                     )}
                     <div>
@@ -93,6 +102,7 @@ export default function ProductPreview({ product: {
                             data-item-image={image}
                             data-item-name={name}
                             data-item-url={`/products/${id}`}
+                            data-item-quantity={quantity}
                             {...dataCustomFields}
                         >Add item ($<span className="font-semibold">{price}</span>)</button>
                     </div>
