@@ -9,11 +9,11 @@ interface LayoutProps extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLD
     enableFooter?: boolean
 }
 
-export default function Layout({ children, title = 'ShopName', enableFooter = true, ...props }: LayoutProps) {
+export default function Layout({ children, title = '', enableFooter = true, ...props }: LayoutProps) {
     return (
         <div {...props} className="flex flex-col h-screen overflow-hidden">
             <Head>
-                <title>{title}</title>
+                <title>{title ? `Lorem - ${title}` : 'Lorem'}</title>
                 <link rel="preconnect" href="https://app.snipcart.com"></link>
                 <link rel="preconnect" href="https://cdn.snipcart.com"></link>
                 <link rel="stylesheet" href="https://cdn.snipcart.com/themes/v3.2.0/default/snipcart.css" />
