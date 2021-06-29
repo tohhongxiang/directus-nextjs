@@ -80,6 +80,27 @@ export default function index({ products = [], categories = [], totalCount }: Pa
         }
     }, [router.query])
 
+    const [sortOption, setSortOption] = useState("")
+    const handleSort = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        console.log(e.target.value)
+        const selectedSortOption = e.target.value
+        setSortOption(selectedSortOption)
+
+        if (selectedSortOption) {
+            router.push({ pathname: '/products', query: { ...router.query, sort: selectedSortOption } })
+        } else {
+            const query = { ...router.query }
+            delete query.sort
+            router.push({ pathname: '/products', query })
+        }
+
+        setIsFiltersMenuOpen(false)
+    }
+    useEffect(() => {
+        const selectedSortOption = (router.query.sort ?? "") as string
+        setSortOption(selectedSortOption)
+    }, [router.query])
+
     const handleClearAll = () => {
         setCategoriesSearch(previousCategoriesSearch => Object.fromEntries(Object.keys(previousCategoriesSearch).map(category => [category, false])))
         setSearch('')
@@ -137,13 +158,22 @@ export default function index({ products = [], categories = [], totalCount }: Pa
                                             <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:shadow-outline" type="submit">
                                                 Search
                                             </button>
-                                            <button className="cursor-pointer font-semibold text-gray-600 hover:text-gray-700 hover:underline" type="button" onClick={handleClearCategories}>
-                                                Clear categories
-                                            </button>
                                         </div>
                                     </div>
                                 </div>
                             </form>
+                            <div className="px-8 pt-6 pb-8 mb-4 max-w-lg mx-auto border-b border-gray-200">
+                                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="sort">
+                                    Sort
+                                </label>
+                                <select value={sortOption} onChange={handleSort} className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:shadow-outline" id="sort">
+                                    <option value="">No sort</option>
+                                    <option value="price">Price (Ascending)</option>
+                                    <option value="-price">Price (Descending)</option>
+                                    <option value="name">Alphabetical (Ascending)</option>
+                                    <option value="-name">Alphabetical (Descending)</option>
+                                </select>
+                            </div>
                             <button onClick={handleClearAll} className="block mx-auto bg-blue-500 hover:bg-blue-700 text-white font-bold p-2 rounded focus:shadow-outline">Clear all filters</button>
                         </div>
                     </div>
