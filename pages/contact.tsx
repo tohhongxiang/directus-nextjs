@@ -3,18 +3,24 @@ import { Layout } from '../components'
 
 export default function contact() {
     return (
-        <Layout>
-            <div className="flex flex-col items-center justify-center py-16 px-4 gap-8">
-                <img src="/images/contact-us.jpg" alt="Contact Us" />
-                <h1 className="font-semibold text-5xl mb-8 text-center">Contact Us!</h1>
-                <ul className="text-lg text-gray-700 font-medium">
-                    <li>Example Company</li>
-                    <li>1 Lorem Ipsum Road 1, #01-34, Singapore 123456</li>
-                    <li>Tel: +65 1234 5678</li>
-                    <li>Fax: +65 9876 5432</li>
-                    <li><a href="mailto:example@example.com" target="_blank" rel="noopener noreferrer" className="hover:underline">example@example.com</a></li>
-                </ul>
-            </div>
+        <Layout title="Contact Us">
+            <section className="text-gray-600 body-font relative">
+                <div className="absolute inset-0 bg-gray-300">
+                    <iframe width="100%" height="100%" frameBorder="0" marginHeight={0} marginWidth={0} title="map" scrolling="no" src="https://maps.google.com/maps?width=100%&height=600&hl=en&q=changi+airport&ie=UTF8&t=&z=14&iwloc=B&output=embed" style={{ filter: 'contrast(1.2) opacity(0.4)' }}></iframe>
+                </div>
+                <div className="container px-5 py-24 mx-auto flex">
+                    <div className="lg:w-1/3 md:w-1/2 bg-white rounded-lg p-8 flex flex-col md:ml-auto w-full mt-10 md:mt-0 relative z-10 shadow-md">
+                        <h1 className="text-gray-900 text-lg mb-1 font-medium title-font">Contact Us!</h1>
+                        <ul className="text-gray-600">
+                            <li>Example Company</li>
+                            <li className="mb-2">1 Lorem Ipsum Road 1, #01-34, Singapore 123456</li>
+                            <li>Tel: <span className="font-medium">+65 1234 5678</span></li>
+                            <li className="mb-2">Fax: <span className="font-medium">+65 9876 5432</span></li>
+                            <li><a href="mailto:example@example.com" target="_blank" rel="noopener noreferrer" className="hover:underline">example@example.com</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
         </Layout>
     )
 }
