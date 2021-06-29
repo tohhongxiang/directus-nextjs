@@ -25,8 +25,8 @@ export default function id({ product }) {
     return (
         <Layout title={product.name}>
             <div className="flex flex-wrap justify-center items-start py-4">
-                <div className="p-4">
-                    <Carousel className="max-w-xl" showStatus={false} showIndicators={false} autoPlay={false} showThumbs={productImages.length > 1} infiniteLoop dynamicHeight
+                <div className="p-4 max-w-2xl">
+                    <Carousel showStatus={false} showIndicators={false} autoPlay={false} showThumbs={productImages.length > 1} infiniteLoop dynamicHeight
                         renderArrowPrev={(onClickHandler, hasPrev, label) =>
                             hasPrev && (
                                 <button type="button" onClick={onClickHandler} title={label} style={{ zIndex: 1 }} className="absolute left-0 top-1/2 bg-gray-200 hover:bg-gray-300 p-2 rounded-full text-bold text-xl flex items-center justify-center">
@@ -42,10 +42,10 @@ export default function id({ product }) {
                             )
                         }
                     >
-                        {productImages.map(img => <div key={img} className="flex items-center justify-center"><img src={img} alt={product.name} style={{ maxHeight: '400px', width: 'auto' }} /></div>)}
+                        {productImages.map(img => <div key={img} className="flex items-center justify-center"><img src={img} alt={product.name} /></div>)}
                     </Carousel>
                 </div>
-                <div className="p-4">
+                <div className="p-4 max-w-xl">
                     <h1 className="text-gray-900 text-3xl font-medium">{product.name}</h1>
                     <ul className="flex flex-wrap gap-2 py-4">
                         {product.categories.map((category) => <Link href={`/products?categories=${category.id}`} key={category.id}><li><button className="px-2 py-1 rounded-md bg-gray-100 text-gray-800 hover:bg-gray-200 font-semibold text-sm">{category.name}</button></li></Link>)}
@@ -78,7 +78,7 @@ export default function id({ product }) {
                         </div>
                     )}
                     <hr className="mt-4 mb-8" />
-                    <div className="flex justify-between">
+                    <div className="flex justify-between gap-x-8">
                         <span className="title-font font-medium text-3xl text-gray-900">${(isNaN(product.price * quantity) ? product.price : product.price * quantity).toFixed(2)}</span>
                         <button className={`snipcart-add-item bg-blue-800 text-gray-100 hover:bg-blue-900 px-4 py-2 rounded-md font-semibold`}
                             data-item-id={product.id}

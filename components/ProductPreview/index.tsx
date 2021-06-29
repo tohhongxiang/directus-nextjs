@@ -14,7 +14,7 @@ export default function ProductPreview({ product: {
             <a>
                 <div className="p-4 w-full max-w-xl">
                     <div className="rounded h-72 overflow-hidden flex justify-center items-center">
-                        <img alt={name} className="object-cover object-center w-full h-full block" src={image} />
+                        <img alt={name} className="object-cover object-center w-full h-full block transform hover:scale-105 duration-300 ease-out" src={image} />
                     </div>
                     <div className="mt-4">
                         <ul className="flex flex-wrap gap-2 mb-2">
