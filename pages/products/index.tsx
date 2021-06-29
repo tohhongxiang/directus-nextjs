@@ -158,7 +158,7 @@ export default function index({ products = [], categories = [], totalCount }: Pa
                             </div>
                         </div>
                         {products.length > 0 ? (
-                            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-12 items-start">
+                            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-12">
                                 {products.map(product => <ProductPreview key={product.id} product={product} />)}
                             </div>
                         ) : <p className="text-center font-bold text-2xl text-gray-600">No products found...</p>}
