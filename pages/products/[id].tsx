@@ -51,32 +51,30 @@ export default function id({ product }) {
                         {product.categories.map((category) => <Link href={`/products?categories=${category.id}`} key={category.id}><li><button className="px-2 py-1 rounded-md bg-gray-100 text-gray-800 hover:bg-gray-200 font-semibold text-sm">{category.name}</button></li></Link>)}
                     </ul>
                     <div dangerouslySetInnerHTML={{ __html: product.description }} className={`opacity-90 prose prose-sm mb-8`} />
-                    {product.custom_fields.length > 0 && (
-                        <div>
-                            <div className="flex flex-col gap-4">
-                                {product.custom_fields.map(({ name, options }, index) => (
-                                    <div key={name}>
-                                        <label htmlFor={name} className="block text-sm font-medium text-gray-700 mb-1">
-                                            {capitalise(name)}
-                                        </label>
-                                        <select id={name} className="shadow-sm p-2 border border-gray-300 rounded-md" onChange={handleOptionChange(index)}>
-                                            {options.map(option => <option key={option} value={option}>{capitalise(option)}</option>)}
-                                        </select>
-                                    </div>
-                                ))}
-                                <div>
-                                    <label htmlFor={"quantity"} className="block text-sm font-medium text-gray-700 mb-1">
-                                        Quantity
+                    <div>
+                        <div className="flex flex-col gap-4">
+                            {product.custom_fields.map(({ name, options }, index) => (
+                                <div key={name}>
+                                    <label htmlFor={name} className="block text-sm font-medium text-gray-700 mb-1">
+                                        {capitalise(name)}
                                     </label>
-                                    <input type="number" value={quantity} min={1} step={1}
-                                        id={"quantity"} className="shadow-sm p-2 border border-gray-300 rounded-md inline"
-                                        onChange={e => setQuantity(parseInt(e.target.value))}
-                                        style={{ width: '60px' }}
-                                    />
+                                    <select id={name} className="shadow-sm p-2 border border-gray-300 rounded-md" onChange={handleOptionChange(index)}>
+                                        {options.map(option => <option key={option} value={option}>{capitalise(option)}</option>)}
+                                    </select>
                                 </div>
+                            ))}
+                            <div>
+                                <label htmlFor={"quantity"} className="block text-sm font-medium text-gray-700 mb-1">
+                                    Quantity
+                                </label>
+                                <input type="number" value={quantity} min={1} step={1}
+                                    id={"quantity"} className="shadow-sm p-2 border border-gray-300 rounded-md inline"
+                                    onChange={e => setQuantity(parseInt(e.target.value))}
+                                    style={{ width: '60px' }}
+                                />
                             </div>
                         </div>
-                    )}
+                    </div>
                     <hr className="mt-4 mb-8" />
                     <div className="flex justify-between gap-x-8">
                         <span className="title-font font-medium text-3xl text-gray-900">${(isNaN(product.price * quantity) ? product.price : product.price * quantity).toFixed(2)}</span>
@@ -85,16 +83,13 @@ export default function id({ product }) {
                             data-item-price={product.price}
                             data-item-image={product.image}
                             data-item-name={product.name}
-                            data-item-url={`/products/${id}`}
+                            data-item-url={`/products/${product.id}`}
                             data-item-quantity={quantity}
                             {...dataCustomFields}
                         >Add to cart</button>
                     </div>
                 </div>
             </div>
-            {/* <div className="flex flex-cols items-center justify-center py-16 px-8">
-                <ProductPreview product={product} expanded />
-            </div> */}
         </Layout>
     )
 }
