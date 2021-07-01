@@ -21,24 +21,22 @@ const DEFAULT_LIMIT = 100
 const DEFAULT_PAGE = 1
 
 export default function index({ products = [], categories = [], totalCount }: PageProps) {
-    const [search, setSearch] = useState('')
-
     const router = useRouter()
+
+    // search query
+    const [search, setSearch] = useState('')
     const handleTextSearch = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         router.push({ pathname: '/products', query: { ...router.query, search } })
         setIsFiltersMenuOpen(false)
     }
-
     const handleClearText = () => {
         setSearch('')
-        const newQueryObject = { ...router.query }
-        delete newQueryObject.search
+        const { search, ...newQueryObject } = router.query
 
         router.push({ pathname: '/products', query: newQueryObject })
         setIsFiltersMenuOpen(false)
     }
-
     useEffect(() => {
         const searchQuery = router.query.search as string
         if (searchQuery) {
@@ -46,8 +44,8 @@ export default function index({ products = [], categories = [], totalCount }: Pa
         }
     }, [router.query])
 
+    // category query
     const [categoriesSearch, setCategoriesSearch] = useState(Object.fromEntries(categories.map(category => [category.id, false])))
-
     const handleCategorySearch = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
 
@@ -56,16 +54,13 @@ export default function index({ products = [], categories = [], totalCount }: Pa
         router.push({ pathname: '/products', query: { ...router.query, categories } })
         setIsFiltersMenuOpen(false)
     }
-
     const handleClearCategories = () => {
         // sets all values in categoriesSearch to false
         setCategoriesSearch(previousCategoriesSearch => Object.fromEntries(Object.keys(previousCategoriesSearch).map(category => [category, false])))
-        const newQueryObject = { ...router.query }
-        delete newQueryObject.categories
+        const { categories, ...newQueryObject } = router.query
         router.push({ pathname: '/products', query: newQueryObject })
         setIsFiltersMenuOpen(false)
     }
-
     useEffect(() => {
         const markedCategories = router.query.categories as string[]
 
@@ -80,17 +75,16 @@ export default function index({ products = [], categories = [], totalCount }: Pa
         }
     }, [router.query])
 
+    // sort query
     const [sortOption, setSortOption] = useState("")
     const handleSort = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        console.log(e.target.value)
         const selectedSortOption = e.target.value
         setSortOption(selectedSortOption)
 
         if (selectedSortOption) {
             router.push({ pathname: '/products', query: { ...router.query, sort: selectedSortOption } })
         } else {
-            const query = { ...router.query }
-            delete query.sort
+            const { sort, ...query } = router.query
             router.push({ pathname: '/products', query })
         }
 
@@ -101,6 +95,7 @@ export default function index({ products = [], categories = [], totalCount }: Pa
         setSortOption(selectedSortOption)
     }, [router.query])
 
+    // clear all filters from query
     const handleClearAll = () => {
         setCategoriesSearch(previousCategoriesSearch => Object.fromEntries(Object.keys(previousCategoriesSearch).map(category => [category, false])))
         setSearch('')
@@ -108,9 +103,18 @@ export default function index({ products = [], categories = [], totalCount }: Pa
         router.push({ pathname: '/products' })
     }
 
+    // handles filter menu open/close
     const [isFiltersMenuOpen, setIsFiltersMenuOpen] = useState(false)
     const filtersMenuRef = useRef<HTMLDivElement>(null)
     useOnClickOutside(filtersMenuRef, () => setIsFiltersMenuOpen(false))
+
+    // scroll to top of page if query changes
+    const topOfPageRef = useRef(null)
+    useEffect(() => {
+        if (topOfPageRef.current) {
+            topOfPageRef.current.scrollIntoView()
+        }
+    }, [router.query])
 
     const currentPage = parseInt(router.query.page as string ?? DEFAULT_PAGE.toString())
     const limit = parseInt(router.query.limit as string ?? DEFAULT_LIMIT.toString())
@@ -156,8 +160,9 @@ export default function index({ products = [], categories = [], totalCount }: Pa
                                         ))}
                                         <div className="mt-4 flex flex-col items-center justify-center gap-y-2">
                                             <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:shadow-outline" type="submit">
-                                                Search
+                                                Filter by categories
                                             </button>
+                                            <button className="font-medium hover:underline opacity-70" onClick={handleClearCategories}>Clear categories</button>
                                         </div>
                                     </div>
                                 </div>
@@ -179,7 +184,7 @@ export default function index({ products = [], categories = [], totalCount }: Pa
                     </div>
                 </div>
                 <div className="overflow-y-auto overflow-x-hidden w-full">
-                    <div className="py-8 px-4">
+                    <div className="py-8 px-4" ref={topOfPageRef}>
                         <div className="flex flex-col items-baseline gap-x-8 mb-12">
                             <h1 className="font-bold text-2xl mb-4">All Products</h1>
                             <div className="flex justify-start w-full gap-4">
