@@ -92,10 +92,9 @@ export default function Navbar() {
                             </div>
                         </div>
                     </div>
-                    <button className="snipcart-customer-signin"><a className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">{customer ? customer.billingAddress.fullName : "Login"}</a></button>
+                    <button className="snipcart-customer-signin text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">{customer ? customer.billingAddress.fullName : "Login"}</button>
                 </div>
             </div>
-
             <div className={`${isNavbarOpen ? "block" : "hidden"} sm:hidden`} id="mobile-menu">
                 <div className="px-2 pt-2 pb-3 space-y-1">
                     {isLoggedIn && PRIVATE_LINKS.map(link => (
