@@ -67,7 +67,8 @@ nano .env
 More information and other `.env` variables are found [here](https://docs.directus.io/reference/environment-variables/#security)
 
 ## Variables used by NextJS
-- `STOREFRONT_URL` - Website where the frontend is located (http://localhost:3000)
+- `NEXT_PUBLIC_STOREFRONT_NAME` - Name of the store itself
+- `NEXT_PUBLIC_STOREFRONT_URL` - Website where the frontend is located (http://localhost:3000)
 - `DIRECTUS_URL` - Website where the backend is located (http://localhost:8055)
 - `DIRECTUS_EMAIL` - Email used for directus admin user
 - `DIRECTUS_PASSWORD` - Password used for directus admin user
@@ -133,3 +134,4 @@ Here is the following feature scope we would like to achieve
 - [Directus Assets](https://docs.directus.io/reference/api/assets/)
 - [SEO](https://snipcart.com/blog/react-nextjs-single-page-application-seo)
 - [Snipcart API](https://docs.snipcart.com/v3/api-reference/introduction)
+- [NextJS E-commerce Tutorial](https://snipcart.com/blog/react-ecommerce-tutorial)
