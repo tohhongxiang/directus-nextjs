@@ -4,8 +4,12 @@ import { Layout, ProductPreview } from '../../components'
 import { capitalise, getProduct, getProducts } from '../../utils'
 import { Carousel } from 'react-responsive-carousel';
 import Link from 'next/link'
+import { Product } from '../../types';
 
-export default function id({ product }) {
+interface ProductPageProps {
+    product: Product
+}
+export default function id({ product }: ProductPageProps) {
     const [quantity, setQuantity] = useState(1)
     const [dataCustomFields, setDataCustomFields] = useState(() => {
         const result = {}
@@ -27,7 +31,8 @@ export default function id({ product }) {
             "og:description": `Learn more about ${product.name}`,
             "og:title": `${product.name} - ${process.env.NEXT_PUBLIC_STOREFRONT_NAME}`,
             "og:type": "website",
-            "og:url": `${process.env.NEXT_PUBLIC_STOREFRONT_URL}/products/${product.id}`
+            "og:url": `${process.env.NEXT_PUBLIC_STOREFRONT_URL}/products/${product.id}`,
+            "og:image": product.image
         }}>
             <div className="flex flex-wrap justify-center items-start py-4">
                 <div className="p-4 max-w-2xl">
