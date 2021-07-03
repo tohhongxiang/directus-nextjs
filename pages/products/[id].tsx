@@ -23,7 +23,12 @@ export default function id({ product }) {
     const productImages = [product.image, ...product.secondary_images]
 
     return (
-        <Layout title={product.name}>
+        <Layout title={product.name} seoTags={{
+            "og:description": `Learn more about ${product.name}`,
+            "og:title": `${product.name} - ${process.env.NEXT_PUBLIC_STOREFRONT_NAME}`,
+            "og:type": "website",
+            "og:url": `${process.env.NEXT_PUBLIC_STOREFRONT_URL}/products/${product.id}`
+        }}>
             <div className="flex flex-wrap justify-center items-start py-4">
                 <div className="p-4 max-w-2xl">
                     <Carousel showStatus={false} showIndicators={false} autoPlay={false} showThumbs={productImages.length > 1} infiniteLoop dynamicHeight

@@ -62,7 +62,7 @@ export default function Navbar() {
                     </div>
                     <div className="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
                         <div className="flex-shrink-0 flex items-center">
-                            <Link href="/"><a><strong className="text-xl font-bold text-white">Lorem</strong></a></Link>
+                            <Link href="/"><a><strong className="text-xl font-bold text-white">{process.env.NEXT_PUBLIC_STOREFRONT_NAME}</strong></a></Link>
                         </div>
                         <div className="hidden sm:block sm:ml-6">
                             <div className="flex space-x-4 items-center">

@@ -11,7 +11,7 @@ module.exports = function registerHook({ services, exceptions }) {
             const response = await fetch(`${API_URL}/products`, {
                 method: 'POST',
                 body: JSON.stringify({
-                    fetchUrl: `${process.env.STOREFRONT_URL}/products/${item}`
+                    fetchUrl: `${process.env.NEXT_PUBLIC_STOREFRONT_URL}/products/${item}`
                 }),
                 headers: {
                     'Authorization': `Basic ${Buffer.from(process.env.SNIPCART_SECRET).toString('base64')}`,
