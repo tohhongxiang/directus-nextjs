@@ -1,10 +1,11 @@
-import { GetStaticPropsContext } from 'next'
 import React, { useState } from 'react'
-import { Layout, ProductPreview } from '../../components'
+import { GetStaticPropsContext } from 'next'
+import Link from 'next/link'
+import { Layout } from '../../components'
 import { capitalise, getProduct, getProducts } from '../../utils'
 import { Carousel } from 'react-responsive-carousel';
-import Link from 'next/link'
 import { Product } from '../../types';
+import Lightbox from 'react-image-lightbox'
 
 interface ProductPageProps {
     product: Product
@@ -26,15 +27,17 @@ export default function id({ product }: ProductPageProps) {
     }
     const productImages = [product.image, ...product.secondary_images]
 
+    const [photoIndex, setPhotoIndex] = useState(0)
+    const [isOpen, setIsOpen] = useState(false)
     return (
         <Layout title={product.name} seoTags={{
-            "og:description": `Learn more about ${product.name}`,
+            "og:description": `Learn more about ${product.name} sold by ${process.env.NEXT_PUBLIC_STOREFRONT_NAME}`,
             "og:title": `${product.name} - ${process.env.NEXT_PUBLIC_STOREFRONT_NAME}`,
             "og:type": "website",
             "og:url": `${process.env.NEXT_PUBLIC_STOREFRONT_URL}/products/${product.id}`,
             "og:image": product.image
         }}>
-            <div className="flex flex-wrap justify-center items-start py-4">
+            <div className="flex flex-wrap justify-center items-start py-4 gap-8">
                 <div className="p-4 max-w-2xl">
                     <Carousel showStatus={false} showIndicators={false} autoPlay={false} showThumbs={productImages.length > 1} infiniteLoop dynamicHeight
                         renderArrowPrev={(onClickHandler, hasPrev, label) =>
@@ -52,8 +55,18 @@ export default function id({ product }: ProductPageProps) {
                             )
                         }
                     >
-                        {productImages.map(img => <div key={img} className="flex items-center justify-center"><img src={img} alt={product.name} /></div>)}
+                        {productImages.map(img => <div key={img} className="flex items-center cursor-pointer" onClick={() => setIsOpen(c => !c)}><img src={img} alt={product.name} /></div>)}
                     </Carousel>
+                    {isOpen && (
+                        <Lightbox
+                            mainSrc={productImages[photoIndex]}
+                            nextSrc={productImages[(photoIndex + 1) % productImages.length]}
+                            prevSrc={productImages[(photoIndex + productImages.length - 1) % productImages.length]}
+                            onCloseRequest={() => setIsOpen(false)}
+                            onMovePrevRequest={() => setPhotoIndex(prevIndex => (prevIndex + productImages.length - 1) % productImages.length)}
+                            onMoveNextRequest={() => setPhotoIndex(prevIndex => (prevIndex + 1) % productImages.length)}
+                        />
+                    )}
                 </div>
                 <div className="p-4 max-w-xl">
                     <h1 className="text-gray-900 text-3xl font-medium">{product.name}</h1>

@@ -1,6 +1,7 @@
+import React from 'react'
 import 'tailwindcss/tailwind.css'
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-import React from 'react'
+import 'react-image-lightbox/style.css';
 import SnipcartContextProvider from '../context/SnipcartContext';
 import Head from 'next/head'
 
