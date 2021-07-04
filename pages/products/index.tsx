@@ -209,17 +209,22 @@ export default function index({ products = [], categories = [], totalCount }: Pa
 }
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-    const { search: textSearch, categories: categoriesSearch, page, limit, ...params }: any = context.query
+    const { search: textSearch, categories: categoriesSearch, featured, page, limit, ...params }: any = context.query
 
     params.page = page ? page : DEFAULT_PAGE
     params.limit = limit ? limit : DEFAULT_LIMIT
+    params.filter = {}
 
     if (textSearch) {
         params.search = textSearch
     }
 
     if (categoriesSearch) {
-        params.filter = { categories: { categories_id: { _in: categoriesSearch } } }
+        params.filter = { ...params.filter, categories: { categories_id: { _in: categoriesSearch } } }
+    }
+
+    if (featured) {
+        params.filter = { ...params.filter, featured: { _eq: true } }
     }
 
     const { data: products, meta: { filter_count } } = await getProducts(params)
