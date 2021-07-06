@@ -19,7 +19,7 @@ interface LayoutProps extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLD
 
 export default function Layout({ children, title = '', enableFooter = true, seoTags = {} as any, ...props }: LayoutProps) {
     return (
-        <div {...props} className="flex flex-col h-screen overflow-hidden">
+        <div {...props} className="flex flex-col h-screen overflow-hidden bg-primary-50">
             <Head>
                 <title>{title ? `${title} - ${process.env.NEXT_PUBLIC_STOREFRONT_NAME}` : `${process.env.NEXT_PUBLIC_STOREFRONT_NAME}`}</title>
                 {Object.entries(seoTags).map(([property, content]) => <meta key={property} property={property} content={content} />)}

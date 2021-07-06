@@ -123,7 +123,7 @@ export default function index({ products = [], categories = [], totalCount }: Pa
         <Layout title="Products" enableFooter={false}>
             <div className="flex h-full relative">
                 <div className={`absolute h-full flex justify-start ${isFiltersMenuOpen ? 'bg-opacity-80 w-full z-10' : 'bg-opacity-0'} bg-black`} aria-expanded={isFiltersMenuOpen} role="menu" id="filtersMenu" aria-labelledby="filtersMenuButton">
-                    <div ref={filtersMenuRef} className="relative h-full bg-gray-100">
+                    <div ref={filtersMenuRef} className="relative h-full bg-primary-100">
                         <div className={`${isFiltersMenuOpen ? 'block' : 'hidden'}`}>
                             <button className="p-4 rounded absolute top-0 right-0" onClick={() => setIsFiltersMenuOpen(false)}>×</button>
                             <form className={`px-8 pt-6 pb-8 mb-4 max-w-lg mx-auto border-b border-gray-200`} onSubmit={handleTextSearch}>
@@ -138,7 +138,7 @@ export default function index({ products = [], categories = [], totalCount }: Pa
                                                 ×
                                             </button>}
                                         </div>
-                                        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold p-2 rounded-r focus:shadow-outline" type="submit">
+                                        <button className="bg-primary-500 hover:bg-primary-700 text-white font-bold p-2 rounded-r focus:shadow-outline" type="submit">
                                             <img src="/icons/search.svg" alt="search" />
                                         </button>
                                     </div>
@@ -159,7 +159,7 @@ export default function index({ products = [], categories = [], totalCount }: Pa
                                             </div>
                                         ))}
                                         <div className="mt-4 flex flex-col items-center justify-center gap-y-2">
-                                            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:shadow-outline" type="submit">
+                                            <button className="bg-primary-500 hover:bg-primary-700 text-white font-bold py-2 px-4 rounded focus:shadow-outline" type="submit">
                                                 Filter by categories
                                             </button>
                                             <button className="font-medium hover:underline opacity-70" onClick={handleClearCategories}>Clear categories</button>
@@ -179,7 +179,7 @@ export default function index({ products = [], categories = [], totalCount }: Pa
                                     <option value="-name">Alphabetical (Descending)</option>
                                 </select>
                             </div>
-                            <button onClick={handleClearAll} className="block mx-auto bg-blue-500 hover:bg-blue-700 text-white font-bold p-2 rounded focus:shadow-outline">Clear all filters</button>
+                            <button onClick={handleClearAll} className="block mx-auto bg-primary-500 hover:bg-primary-700 text-white font-bold p-2 rounded focus:shadow-outline">Clear all filters</button>
                         </div>
                     </div>
                 </div>
