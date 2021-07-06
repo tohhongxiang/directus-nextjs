@@ -46,8 +46,8 @@ export default function index({ products = [], categories = [], totalCount }: Pa
 
     // category query
     const [categoriesSearch, setCategoriesSearch] = useState(Object.fromEntries(categories.map(category => [category.id, false])))
-    const handleCategorySearch = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault()
+    const handleCategorySearch = (e?: React.FormEvent<HTMLFormElement>) => {
+        e && e.preventDefault()
 
         // get all categoryIDs marked true into an array
         const categories = Object.keys(categoriesSearch).filter(categoryId => categoriesSearch[categoryId])
@@ -103,6 +103,12 @@ export default function index({ products = [], categories = [], totalCount }: Pa
         router.push({ pathname: '/products' })
     }
 
+    // apply all filters
+    const handleSearchAll = () => {
+        const categories = Object.keys(categoriesSearch).filter(categoryId => categoriesSearch[categoryId])
+        router.push({ pathname: '/products', query: { ...router.query, search, categories } })
+    }
+
     // handles filter menu open/close
     const [isFiltersMenuOpen, setIsFiltersMenuOpen] = useState(false)
     const filtersMenuRef = useRef<HTMLDivElement>(null)
@@ -122,11 +128,11 @@ export default function index({ products = [], categories = [], totalCount }: Pa
     return (
         <Layout title="Products" enableFooter={false}>
             <div className="flex h-full relative">
-                <div className={`absolute h-full flex justify-start ${isFiltersMenuOpen ? 'bg-opacity-80 w-full z-10' : 'bg-opacity-0'} bg-black`} aria-expanded={isFiltersMenuOpen} role="menu" id="filtersMenu" aria-labelledby="filtersMenuButton">
-                    <div ref={filtersMenuRef} className="relative h-full bg-primary-100">
-                        <div className={`${isFiltersMenuOpen ? 'block' : 'hidden'}`}>
-                            <button className="p-4 rounded absolute top-0 right-0" onClick={() => setIsFiltersMenuOpen(false)}>×</button>
-                            <form className={`px-8 pt-6 pb-8 mb-4 max-w-lg mx-auto border-b border-gray-200`} onSubmit={handleTextSearch}>
+                <div className={`absolute xl:relative h-full flex justify-start ${isFiltersMenuOpen ? 'w-full xl:w-auto z-10' : 'bg-opacity-0'} bg-black bg-opacity-80`} aria-expanded={isFiltersMenuOpen} role="menu" id="filtersMenu" aria-labelledby="filtersMenuButton">
+                    <div ref={filtersMenuRef} className="relative h-full bg-primary-50 border-r border-gray-200">
+                        <div className={`${isFiltersMenuOpen ? 'block' : 'hidden'} xl:block flex flex-col items-center justify-center gap-8`}>
+                            <button className="xl:hidden p-4 rounded absolute top-0 right-0" onClick={() => setIsFiltersMenuOpen(false)}>×</button>
+                            <form className={`px-8 pt-6 pb-8 mb-4 max-w-lg mx-auto`} onSubmit={handleTextSearch}>
                                 <div>
                                     <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="search">
                                         Search
@@ -144,7 +150,7 @@ export default function index({ products = [], categories = [], totalCount }: Pa
                                     </div>
                                 </div>
                             </form>
-                            <form className="px-8 pt-6 pb-8 mb-4 max-w-lg mx-auto border-b border-gray-200" onSubmit={handleCategorySearch}>
+                            <form className="px-8 pt-6 pb-8 mb-4 max-w-lg mx-auto" onSubmit={handleCategorySearch}>
                                 <div>
                                     <small className="block text-gray-700 text-sm font-bold mb-2">
                                         Categories
@@ -167,7 +173,7 @@ export default function index({ products = [], categories = [], totalCount }: Pa
                                     </div>
                                 </div>
                             </form>
-                            <div className="px-8 pt-6 pb-8 mb-4 max-w-lg mx-auto border-b border-gray-200">
+                            <div className="px-8 pt-6 pb-8 mb-4 max-w-lg mx-auto">
                                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="sort">
                                     Sort
                                 </label>
@@ -179,7 +185,12 @@ export default function index({ products = [], categories = [], totalCount }: Pa
                                     <option value="-name">Alphabetical (Descending)</option>
                                 </select>
                             </div>
-                            <button onClick={handleClearAll} className="block mx-auto bg-primary-500 hover:bg-primary-700 text-white font-bold p-2 rounded focus:shadow-outline">Clear all filters</button>
+                            <div className="mt-4 flex flex-col items-center justify-center gap-y-2">
+                                <button onClick={handleSearchAll} className="bg-primary-500 hover:bg-primary-700 text-white font-bold py-2 px-4 rounded focus:shadow-outline" type="submit">
+                                    Apply all filters
+                                </button>
+                                <button onClick={handleClearAll} className="font-medium hover:underline opacity-70">Clear all filters</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -188,7 +199,7 @@ export default function index({ products = [], categories = [], totalCount }: Pa
                         <div className="flex flex-col items-baseline gap-x-8 mb-12">
                             <h1 className="font-bold text-2xl mb-4">All Products</h1>
                             <div className="flex justify-start w-full gap-4">
-                                <button id="filtersMenuButton" className={`rounded-md bg-gray-100 hover:bg-gray-200 font-semibold px-4 py-2 ${isFiltersMenuOpen ? 'hidden' : 'block'}`} onClick={() => setIsFiltersMenuOpen(true)} aria-haspopup={true} aria-controls="filtersMenu">Filters & Search</button>
+                                <button id="filtersMenuButton" className={`rounded-md bg-gray-100 hover:bg-gray-200 font-semibold px-4 py-2 ${isFiltersMenuOpen ? 'hidden' : 'block'} xl:hidden`} onClick={() => setIsFiltersMenuOpen(true)} aria-haspopup={true} aria-controls="filtersMenu">Filters & Search</button>
                                 {areFiltersActive && <button onClick={handleClearAll} className="font-semibold text-gray-600 rounded-md px-4 py-2 hover:text-gray-900 hover:underline">Clear filters</button>}
                             </div>
                         </div>
