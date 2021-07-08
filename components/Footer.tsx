@@ -1,5 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 
 export default function Footer() {
     return (
@@ -7,7 +8,7 @@ export default function Footer() {
             <div className="container px-5 py-16 mx-auto flex md:items-center lg:items-start md:flex-row md:flex-nowrap flex-wrap flex-col">
                 <div className="w-64 flex-shrink-0 md:mx-0 mx-auto text-center md:text-left">
                     <a className="flex font-medium items-center md:justify-start justify-center text-gray-900">
-                        <img src={"icons/favicon.svg"} width={64} height={64} />
+                        <Image src={"/icons/favicon.svg"} width={64} height={64} alt="" />
                         <span className="ml-3 text-xl">{process.env.NEXT_PUBLIC_STOREFRONT_NAME}</span>
                     </a>
                     <p className="mt-2 text-sm text-gray-500">E-commerce store built in NextJS, TailwindCSS, Directus and Snipcart</p>

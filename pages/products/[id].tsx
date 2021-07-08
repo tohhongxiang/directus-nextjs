@@ -120,10 +120,16 @@ export default function id({ product }: ProductPageProps) {
 export async function getStaticProps(context: GetStaticPropsContext) {
     const { id } = context.params
 
-    const product = await getProduct(id as string)
-    return {
-        props: { product },
-        revalidate: 60
+    try {
+        const product = await getProduct(id as string)
+        return {
+            props: { product },
+            revalidate: 60
+        }
+    } catch (e) {
+        return {
+            notFound: true
+        }
     }
 }
 
