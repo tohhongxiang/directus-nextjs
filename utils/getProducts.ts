@@ -1,7 +1,7 @@
 import { API_URL } from "../constants"
 import { Product } from "../types/Product"
 import getCategory from "./getCategory"
-import serialize from "./serialize"
+import { serialize } from "."
 
 /**
  * Gets all products from API

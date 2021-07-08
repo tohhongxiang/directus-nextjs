@@ -222,24 +222,25 @@ export default function index({ products = [], categories = [], totalCount }: Pa
 export async function getServerSideProps(context: GetServerSidePropsContext) {
     const { search: textSearch, categories: categoriesSearch, featured, page, limit, ...params }: any = context.query
 
+    // set up default query params for product search
     params.page = page ? page : DEFAULT_PAGE
     params.limit = limit ? limit : DEFAULT_LIMIT
     params.filter = {}
 
     if (textSearch) {
-        params.search = textSearch
+        params.search = textSearch // search by text
     }
 
     if (categoriesSearch) {
-        params.filter = { ...params.filter, categories: { categories_id: { _in: categoriesSearch } } }
+        params.filter = { ...params.filter, categories: { categories_id: { _in: categoriesSearch } } } // match at least 1 category
     }
 
     if (featured) {
-        params.filter = { ...params.filter, featured: { _eq: true } }
+        params.filter = { ...params.filter, featured: { _eq: true } } // must be featured
     }
 
     const { data: products, meta: { filter_count } } = await getProducts(params)
-    const { data: categories } = await getCategories()
+    const { data: categories } = await getCategories({ filter: { products: { id: { _nnull: true } } } }) // get all categories with at least 1 product
 
     return {
         props: {
