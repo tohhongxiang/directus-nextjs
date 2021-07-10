@@ -38,7 +38,7 @@ export default function id({ product }: ProductPageProps) {
             "og:image": product.image
         }}>
             <div className="flex flex-wrap justify-center items-start py-4 gap-8">
-                <div className="p-4 max-w-2xl">
+                <div className="p-4 max-w-2xl sticky top-0">
                     <Carousel showStatus={false} showIndicators={false} autoPlay={false} showThumbs={productImages.length > 1} infiniteLoop dynamicHeight
                         renderArrowPrev={(onClickHandler, hasPrev, label) =>
                             hasPrev && (
@@ -68,7 +68,7 @@ export default function id({ product }: ProductPageProps) {
                         />
                     )}
                 </div>
-                <div className="p-4 max-w-xl">
+                <div className="p-4 max-w-xl sticky top-0">
                     <h1 className="text-gray-900 text-3xl font-medium">{product.name}</h1>
                     <ul className="flex flex-wrap gap-2 py-4">
                         {product.categories.map((category) => <Link href={`/products?categories=${category.id}`} key={category.id}><li><button className="px-2 py-1 rounded-md bg-gray-100 text-gray-800 hover:bg-gray-200 font-semibold text-sm">{category.name}</button></li></Link>)}
