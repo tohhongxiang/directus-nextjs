@@ -22,7 +22,7 @@ export default function Layout({ children, title = '', enableFooter = true, seoT
         <div {...props} className="flex flex-col h-screen overflow-hidden bg-primary-50">
             <Head>
                 <title>{title ? `${title} - ${process.env.NEXT_PUBLIC_STOREFRONT_NAME}` : `${process.env.NEXT_PUBLIC_STOREFRONT_NAME}`}</title>
-                {Object.entries(seoTags).map(([property, content]) => <meta key={property} property={property} content={content} />)}
+                {Object.entries(seoTags).map(([property, content]) => <meta key={property} property={property} name={property} content={content} />)}
                 <link rel="preconnect" href="https://app.snipcart.com"></link>
                 <link rel="preconnect" href="https://cdn.snipcart.com"></link>
                 <link rel="stylesheet" href="https://cdn.snipcart.com/themes/v3.2.0/default/snipcart.css" />

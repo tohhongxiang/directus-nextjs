@@ -23,7 +23,8 @@ export default async function getProducts<T extends { [key: string]: any }>(quer
         thumbnail: `${API_URL}/assets/${product.image.id}?width=400&height=400&fit=inside`,
         secondary_images: product.secondary_images.map(image => `${API_URL}/assets/${image.directus_files_id}?width=400&height=400&fit=inside`),
         categories: (await Promise.all(product.categories.map(category => getCategory(category.categories_id)))),
-        custom_fields: product.custom_fields ?? []
+        custom_fields: product.custom_fields ?? [],
+        seo: product.seo && product.seo[0] ? product.seo[0] : {}
     })))
 
     return { data, meta }

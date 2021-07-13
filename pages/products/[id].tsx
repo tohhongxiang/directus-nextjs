@@ -35,10 +35,11 @@ export default function id({ product }: ProductPageProps) {
             "og:title": `${product.name} - ${process.env.NEXT_PUBLIC_STOREFRONT_NAME}`,
             "og:type": "website",
             "og:url": `${process.env.NEXT_PUBLIC_STOREFRONT_URL}/products/${product.id}`,
-            "og:image": product.image
+            "og:image": product.image,
+            ...product.seo
         }}>
-            <div className="flex flex-wrap justify-center items-start py-4 gap-8">
-                <div className="p-4 max-w-2xl sticky top-0">
+            <div className="flex flex-col xl:flex-row justify-center items-center xl:items-start py-4 gap-8">
+                <div className="p-4 max-w-2xl xl:sticky top-0">
                     <Carousel showStatus={false} showIndicators={false} autoPlay={false} showThumbs={productImages.length > 1} infiniteLoop dynamicHeight
                         renderArrowPrev={(onClickHandler, hasPrev, label) =>
                             hasPrev && (
