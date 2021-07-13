@@ -17,26 +17,30 @@ export default function Footer() {
                     <div className="lg:w-1/4 md:w-1/2 w-full px-4">
                         <h2 className="title-font font-medium text-gray-900 tracking-widest text-sm mb-3">CONTACT US</h2>
                         <nav className="list-none mb-10">
-                            <li>
-                                <Link href="/contact"><a className="text-gray-600 hover:text-gray-800 hover:underline">Our Location</a></Link>
-                            </li>
-                            <li>
-                                <Link href="/contact"><a className="text-gray-600 hover:text-gray-800 hover:underline">Get In Touch</a></Link>
-                            </li>
+                            <ul>
+                                <li>
+                                    <Link href="/contact"><a className="text-gray-600 hover:text-gray-800 hover:underline">Our Location</a></Link>
+                                </li>
+                                <li>
+                                    <Link href="/contact"><a className="text-gray-600 hover:text-gray-800 hover:underline">Get In Touch</a></Link>
+                                </li>
+                            </ul>
                         </nav>
                     </div>
                     <div className="lg:w-1/4 md:w-1/2 w-full px-4">
                         <h2 className="title-font font-medium text-gray-900 tracking-widest text-sm mb-3">PRODUCTS</h2>
                         <nav className="list-none mb-10">
-                            <li>
-                                <Link href="/products?featured=true"><a className="text-gray-600 hover:text-gray-800 hover:underline">Featured Products</a></Link>
-                            </li>
-                            <li>
-                                <Link href="/products?sort=-date_created"><a className="text-gray-600 hover:text-gray-800 hover:underline">Recent Additions</a></Link>
-                            </li>
-                            <li>
-                                <Link href="/products"><a className="text-gray-600 hover:text-gray-800 hover:underline">All Products</a></Link>
-                            </li>
+                            <ul>
+                                <li>
+                                    <Link href="/products?featured=true"><a className="text-gray-600 hover:text-gray-800 hover:underline">Featured Products</a></Link>
+                                </li>
+                                <li>
+                                    <Link href="/products?sort=-date_created"><a className="text-gray-600 hover:text-gray-800 hover:underline">Recent Additions</a></Link>
+                                </li>
+                                <li>
+                                    <Link href="/products"><a className="text-gray-600 hover:text-gray-800 hover:underline">All Products</a></Link>
+                                </li>
+                            </ul>
                         </nav>
                     </div>
                 </div>

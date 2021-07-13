@@ -132,7 +132,7 @@ export default function index({ products = [], categories = [], totalCount }: Pa
                     <div ref={filtersMenuRef} className="relative h-full bg-primary-50 border-r border-gray-200">
                         <div className={`${isFiltersMenuOpen ? 'block' : 'hidden'} xl:block flex flex-col items-center justify-center gap-8`}>
                             <button className="xl:hidden p-4 rounded absolute top-0 right-0" onClick={() => setIsFiltersMenuOpen(false)}>×</button>
-                            <form className={`px-8 pt-6 pb-8 mb-4 max-w-lg mx-auto`} onSubmit={handleTextSearch}>
+                            <form role="menuitem" className={`px-8 pt-6 pb-8 mb-4 max-w-lg mx-auto`} onSubmit={handleTextSearch}>
                                 <div>
                                     <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="search">
                                         Search
@@ -150,7 +150,7 @@ export default function index({ products = [], categories = [], totalCount }: Pa
                                     </div>
                                 </div>
                             </form>
-                            <form className="px-8 pt-6 pb-8 mb-4 max-w-lg mx-auto" onSubmit={handleCategorySearch}>
+                            <form role="menuitem" className="px-8 pt-6 pb-8 mb-4 max-w-lg mx-auto" onSubmit={handleCategorySearch}>
                                 <div>
                                     <small className="block text-gray-700 text-sm font-bold mb-2">
                                         Categories
@@ -173,7 +173,7 @@ export default function index({ products = [], categories = [], totalCount }: Pa
                                     </div>
                                 </div>
                             </form>
-                            <div className="px-8 pt-6 pb-8 mb-4 max-w-lg mx-auto">
+                            <div role="menuitem" className="px-8 pt-6 pb-8 mb-4 max-w-lg mx-auto">
                                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="sort">
                                     Sort
                                 </label>
@@ -185,7 +185,7 @@ export default function index({ products = [], categories = [], totalCount }: Pa
                                     <option value="-name">Alphabetical (Descending)</option>
                                 </select>
                             </div>
-                            <div className="mt-4 flex flex-col items-center justify-center gap-y-2">
+                            <div role="menuitem" className="mt-4 flex flex-col items-center justify-center gap-y-2">
                                 <button onClick={handleSearchAll} className="bg-primary-500 hover:bg-primary-700 text-white font-bold py-2 px-4 rounded focus:shadow-outline" type="submit">
                                     Apply all filters
                                 </button>
