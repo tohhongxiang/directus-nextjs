@@ -9,7 +9,7 @@
         "dev": "concurrently \"next dev\" \"npm run server\"",
         "dev:front": "next dev",
         "build": "next build",
-        "start": "next start -p 1234"
+        "start": "next start -p 8002"
     },
     "keywords": [],
     "author": "",
