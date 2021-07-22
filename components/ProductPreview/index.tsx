@@ -7,7 +7,7 @@ interface ProductPreviewProps {
 }
 
 export default function ProductPreview({ product: {
-    id, date_created, date_updated, price, description, name, image, categories = [], thumbnail, secondary_images = [], custom_fields = []
+    id, date_created, date_updated, price, description, name, image, categories = [], thumbnail, secondary_images = [], custom_fields = [], sale_price
 } }: ProductPreviewProps) {
     return (
         <Link href={`/products/${id}`}>
@@ -21,7 +21,10 @@ export default function ProductPreview({ product: {
                             {categories.map((category) => <Link href={`/products?categories=${category.id}`} key={category.id}><li><button className="px-2 py-1 rounded-md bg-gray-100 text-gray-800 hover:bg-gray-200 font-semibold text-sm">{category.name}</button></li></Link>)}
                         </ul>
                         <h2 className="text-gray-700 font-medium hover:underline">{name}</h2>
-                        <p className="mt-1">$<span className="text-xl font-semibold">{price.toFixed(2)}</span></p>
+                        <p className="mt-1">
+                            <span className={`text-xl font-semibold ${sale_price ? 'line-through opacity-70' : ''}`}>$ {price.toFixed(2)}</span> 
+                            {sale_price && <span className="text-2xl font-semibold">${sale_price.toFixed(2)}</span>}
+                        </p>
                     </div>
                 </div>
             </a>

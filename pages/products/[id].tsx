@@ -29,6 +29,10 @@ export default function id({ product }: ProductPageProps) {
 
     const [photoIndex, setPhotoIndex] = useState(0)
     const [isOpen, setIsOpen] = useState(false)
+
+    const calculatePrice = (price = 0, quantity = 0) => {
+        return isNaN(price * quantity) ? price.toFixed(2) : (price * quantity).toFixed(2)
+    }
     return (
         <Layout title={product.name} seoTags={{
             "og:description": `Learn more about ${product.name} sold by ${process.env.NEXT_PUBLIC_STOREFRONT_NAME}`,
@@ -38,8 +42,8 @@ export default function id({ product }: ProductPageProps) {
             "og:image": product.image,
             ...product.seo
         }}>
-            <div className="flex flex-col xl:flex-row justify-center items-center xl:items-start py-4 gap-8">
-                <div className="p-4 max-w-2xl xl:sticky top-0">
+            <div className="lg:flex lg:flex-row justify-center mb-8">
+                <div className="p-4 max-w-2xl mx-auto lg:mx-0 lg:sticky top-0 self-start">
                     <Carousel showStatus={false} showIndicators={false} autoPlay={false} showThumbs={productImages.length > 1} infiniteLoop dynamicHeight
                         renderArrowPrev={(onClickHandler, hasPrev, label) =>
                             hasPrev && (
@@ -69,7 +73,7 @@ export default function id({ product }: ProductPageProps) {
                         />
                     )}
                 </div>
-                <div className="p-4 max-w-xl sticky top-0">
+                <div className="p-4 max-w-xl sticky top-0 flex flex-col mx-auto lg:mx-0 self-start">
                     <h1 className="text-gray-900 text-3xl font-medium">{product.name}</h1>
                     <ul className="flex flex-wrap gap-2 py-4">
                         {product.categories.map((category) => <Link href={`/products?categories=${category.id}`} key={category.id}><li><button className="px-2 py-1 rounded-md bg-gray-100 text-gray-800 hover:bg-gray-200 font-semibold text-sm">{category.name}</button></li></Link>)}
@@ -101,10 +105,13 @@ export default function id({ product }: ProductPageProps) {
                     </div>
                     <hr className="mt-4 mb-8" />
                     <div className="flex justify-between gap-x-8">
-                        <span className="title-font font-medium text-3xl text-gray-900">${(isNaN(product.price * quantity) ? product.price : product.price * quantity).toFixed(2)}</span>
+                        <p className="flex gap-x-2 items-baseline">
+                            <span className={`title-font font-medium text-2xl text-gray-900 ${product.sale_price ? 'line-through opacity-70' : ''}`}>${calculatePrice(product.price, quantity)}</span>
+                            {product.sale_price && <span className="title-font font-medium text-3xl text-gray-900">${calculatePrice(product.sale_price, quantity)}</span>}
+                        </p>
                         <button className={`snipcart-add-item bg-blue-800 text-gray-100 hover:bg-blue-900 px-4 py-2 rounded-md font-semibold`}
                             data-item-id={product.id}
-                            data-item-price={product.price}
+                            data-item-price={product.sale_price ? product.sale_price : product.price}
                             data-item-image={product.image}
                             data-item-name={product.name}
                             data-item-url={`/products/${product.id}`}

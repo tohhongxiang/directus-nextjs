@@ -21,6 +21,7 @@ const DEFAULT_LIMIT = 100
 const DEFAULT_PAGE = 1
 
 export default function index({ products = [], categories = [], totalCount }: PageProps) {
+    console.log({ products })
     const router = useRouter()
 
     // search query

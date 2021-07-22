@@ -5,6 +5,7 @@ export interface Product {
     date_created: string;
     date_updated: string;
     price: number;
+    sale_price: number | null;
     description: string;
     name: string;
     image: string;
