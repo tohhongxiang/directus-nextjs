@@ -21,9 +21,18 @@ export default async function getProducts<T extends { [key: string]: any }>(quer
         }
     }
 
-    console.log(allParams)
-
     let { data, meta } = await fetch(`${API_URL}/items/products?${serialize(allParams)}`).then(r => r.json())
+
+    console.log(`${API_URL}/items/products?${serialize(allParams)}`, data, meta)
+    
+    if (!data) {
+        data = []
+    }
+
+    if (!meta) {
+        meta = { filter_count: 0 }
+    }
+
     data = await Promise.all(data.map(async product => ({
         ...product,
         image: `${API_URL}/assets/${product.image.id}`,

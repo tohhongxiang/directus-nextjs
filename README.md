@@ -1,3 +1,67 @@
+# Directus NextJS Snipcart Integration
+
+This is a fully-fledged E-commerce template built using NextJS, Directus and Snipcart. Features include:
+- Landing page
+- Featured Products section
+- Products listing page (with pagination and filtering)
+- Contact Us page
+- Directus Content Management System for shop owners to add/update/delete their products
+
+## Previews of Webpage
+
+![Video](screenshots/video_preview.gif)
+
+Main Landing Page:
+![Main Landing Page](screenshots/main_page.png)
+
+Product listing page:
+![Product Listing Page](screenshots/products_page.png)
+
+Product page:
+![Product Page](screenshots/product_page.png)
+
+Open cart:
+![Open cart](screenshots/open_cart_page.png)
+
+Directus product listing:
+![Directus product listing](screenshots/directus_product_page.png)
+
+Directus edit product:
+![Directus edit product page](screenshots/directus_edit_product_page.png)
+
+# Local Setup
+
+1. Clone and install dependencies
+
+```
+git clone https://github.com/tohhongxiang123/directus-nextjs.git
+cd directus-nextjs
+npm install
+```
+
+> Note: `npm install` might fail due to `node-gyp` (a dependency within directus). To fix this, run `npm install directus` then `npm install` again
+
+2. Copy `.env.example` to `.env` and fill in the details
+3. Within postgres, create a database `directus-nextjs`, then restore database using `database-backup.sql`
+
+```
+psql -U postgres -d directus-nextjs -f database-backup.sql
+```
+
+Afterwards, update directus databases
+
+```
+npx directus database migrate:latest
+```
+
+4. Start servers
+
+```
+npm run dev
+```
+
+Frontend is on `http://localhost:3000`, while directus server will be on `http://localhost:8055`
+
 # Setup from a clean ubuntu
 
 1. From local, create a database dump and copy into remote
@@ -67,6 +131,7 @@ nano .env
 More information and other `.env` variables are found [here](https://docs.directus.io/reference/environment-variables/#security)
 
 ## Variables used by NextJS
+
 - `NEXT_PUBLIC_STOREFRONT_NAME` - Name of the store itself
 - `NEXT_PUBLIC_STOREFRONT_URL` - Website where the frontend is located (http://localhost:3000)
 - `DIRECTUS_URL` - Website where the backend is located (http://localhost:8055)

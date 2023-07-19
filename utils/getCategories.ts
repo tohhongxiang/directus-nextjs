@@ -10,6 +10,15 @@ export default async function getCategories<T extends { [key: string]: any }>(qu
         meta: 'filter_count',
         ...query
     }
-    const { data, meta } = await fetch(`${API_URL}/items/categories?${serialize(allParams)}`).then(r => r.json())
+    let { data, meta } = await fetch(`${API_URL}/items/categories?${serialize(allParams)}`).then(r => r.json())
+
+    if (!data) {
+        data = []
+    }
+
+    if (!meta) {
+        meta = { filter_count: 0 }
+    }
+
     return { data, meta }
 }
