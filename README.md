@@ -54,6 +54,8 @@ Afterwards, update directus databases
 npx directus database migrate:latest
 ```
 
+> Note: This database sample comes with a default admin account that comes with directus: `admin@example.com`, `123456789`
+
 4. Start servers
 
 ```
